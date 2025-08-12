@@ -9,6 +9,8 @@ import Join from './pages/Join';
 import Unjoin from './components/Unjoin';
 import RegisterPage from './pages/Register';
 import UserMessages from './pages/UserMessages';
+import MessageNew from './pages/MessageNew';
+
 export const routefromelement = createRoutesFromElements(
   <Route path="/" element={<Root />}>
     <Route errorElement={<Errorpage />}>
@@ -18,6 +20,8 @@ export const routefromelement = createRoutesFromElements(
       <Route path="/join" element={<Join />} />
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/unjoin" element={<Unjoin />} />
+
+      <Route path="/messages/new" element={<MessageNew />} />
 
       <Route path="/users/:id/messages" element={<UserMessages />} />
       <Route path="*" element={<Errorpage />} />

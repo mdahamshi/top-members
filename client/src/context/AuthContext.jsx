@@ -13,7 +13,7 @@ export const AuthProvider = ({ children }) => {
   const [error, setError] = useState(null);
 
   const isAuth = !!user;
-  const isMember = isAuth && user.member_status;
+  const isMember = isAuth && user.membership_status;
 
   const request = async (url, options = {}) => {
     const res = await fetch(url, {
@@ -118,25 +118,23 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Logout (GET /auth/logout or DELETE /auth - depends on your API)
   const logout = async () => {
     setLoading(true);
     setError(null);
     try {
-      // Adjust logout endpoint/method to your backend
       await request(api.auth, {
         method: 'GET',
       });
-      setUser(null);
-      localStorage.removeItem(USER_STORAGE_KEY);
+
     } catch (err) {
       setError(err.message);
     } finally {
       setLoading(false);
+      setUser(null);
+      localStorage.removeItem(USER_STORAGE_KEY);
     }
   };
 
-  // Call loadUser once on mount to sync user state if you want
   useEffect(() => {}, []);
   const clearError = () => setError(null);
 

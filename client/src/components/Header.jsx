@@ -39,9 +39,9 @@ export default function Component() {
       <div className="flex items-center gap-4 md:order-2">
         <button onClick={toggleTheme} className="clickable">
           {theme === 'dark' ? (
-            <Moon className="dark:stroke-white stroke-2" />
+            <Moon className="dark:stroke-white stroke-primary stroke-2" />
           ) : (
-            <Sun className="dark:stroke-white stroke-2" />
+            <Sun className="dark:stroke-white stroke-primary stroke-2" />
           )}
         </button>
         {isAuth && (

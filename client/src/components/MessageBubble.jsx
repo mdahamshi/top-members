@@ -1,28 +1,45 @@
 import React, { useState } from 'react';
 import { format } from 'date-fns';
-import { Trash, SquarePen } from 'lucide-react';
+import { Trash, SquarePen, Pin } from 'lucide-react';
 import { Button } from 'flowbite-react';
 import MessageEdit from './MessageEdit';
 import { Link } from 'react-router-dom';
 import api from '../api/urls';
 const getInitials = (name) => (name ? name.charAt(0).toUpperCase() : ': )');
 
-const MessageBubble = ({ removeMessage, msg, avatarColor = '#6C63FF' }) => {
+const MessageBubble = ({
+  onSave,
+  removeMessage,
+  msg,
+  avatarColor = '#6C63FF',
+}) => {
   const [edit, setEdit] = useState(false);
-  const { fname: name, created_at, id, editable, title } = { ...msg };
+  const {  created_at, editable, title } = { ...msg };
   const username = msg?.user?.username;
-  const messageDelete = async (id) => {
+  const name = msg?.user?.fname;
+  const messageDelete = async () => {
     const confirmed = window.confirm(
       'Are you sure you want to delete this message?'
     );
     if (!confirmed) return;
 
-    return removeMessage(id);
+    return removeMessage(msg.id);
   };
+
   if (edit)
-    return <MessageEdit msg={msg} onCancelSave={() => setEdit(false)} />;
+    return (
+      <MessageEdit
+        msg={msg}
+        onCancelSave={(id, data) => {
+          setEdit(false);
+          if (data) onSave(id, data);
+        }}
+      />
+    );
   return (
     <div className="dark:text-white  flex flex-col p-4   rounded-md shadow-md  dark:bg-primaryDark  justify-between gap-3 py-2">
+      {msg.pinned && <Pin className="relative top-0 ml-auto right-0 m-2" />}
+
       {created_at && (
         <div>
           <div className="flex gap-3 justify-center">
@@ -32,7 +49,7 @@ const MessageBubble = ({ removeMessage, msg, avatarColor = '#6C63FF' }) => {
           </div>
         </div>
       )}
-      <div className="flex gap-3">
+      <div className="flex gap-3 ">
         <div
           className="w-12 text-2xl h-12 rounded-full shrink-0 flex items-center justify-center text-white font-bold "
           style={{ backgroundColor: avatarColor }}
@@ -40,14 +57,16 @@ const MessageBubble = ({ removeMessage, msg, avatarColor = '#6C63FF' }) => {
           {getInitials(name)}
         </div>
 
-        <div>
-          <div>{title && <h2 className="text-2xl">{title}</h2>}</div>
-          <div className="bg-primary mb-2 break-words  text-white  px-4 py-2 rounded-xl mt-1 inline-block max-w-xs">
+        <div className="flex flex-col ">
+          <div className="flex justify-between items-start">
+            {title && <h2 className="text-2xl">{title}</h2>}
+          </div>
+          <div className="bg-primary w-fit   mb-2 break-words  inline-block text-white  px-4 py-2 rounded-xl mt-1  ">
             {msg.content}
           </div>
           {username && (
             <div className="dark:text-white text-sm ">
-              by: 
+              by:
               <strong className="dark:text-white text-primary">
                 <Link to={`/users/${msg.user.id}/messages`}>@{username}</Link>
               </strong>
@@ -58,7 +77,7 @@ const MessageBubble = ({ removeMessage, msg, avatarColor = '#6C63FF' }) => {
         </div>
       </div>
       {editable && (
-   <div className="flex gap-4 justify-end">
+        <div className="flex gap-4 justify-end">
           <span title="Edit" className="clickable">
             <SquarePen
               className="dark:stroke-white clickable"
@@ -71,7 +90,6 @@ const MessageBubble = ({ removeMessage, msg, avatarColor = '#6C63FF' }) => {
               onClick={messageDelete}
             />
           </span>
-
         </div>
       )}
     </div>

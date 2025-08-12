@@ -14,5 +14,6 @@ CREATE TABLE messages (
   user_id INT REFERENCES users(id),
   title TEXT,
   content TEXT NOT NULL,
+  pinned BOOLEAN DEFAULT FALSE,
   created_at TIMESTAMP DEFAULT NOW()
 );

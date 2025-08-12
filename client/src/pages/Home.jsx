@@ -11,43 +11,33 @@ import MessageList from '../components/MessageList';
 import api from '../api/urls';
 export default function Home() {
   const {
-    remove: removeMessage,
     data: messages,
-    loading,
     load: getMessages,
-    create: addMessage,
+    update: updateMessage,
+    remove: removeMessage,
   } = useCrud(api.messages);
   const { isAuth, user, isMember } = useAuth();
 
   const { appName } = useApp();
-  const [open, setModal] = useState(false);
 
-  const handleModalClose = () => {
-    window.history.replaceState(null, '', '/');
-    setModal(false);
-  };
+
   useEffect(() => {
-    if (!loading) getMessages();
+    getMessages();
   }, []);
-  const onMessageUpdate = ({ text, name, id }) => {
-    setData((prev) =>
-      prev.map((msg) => {
-        if (msg.id == id)
-          return {
-            ...msg,
-            text,
-            name,
-          };
-        else return msg;
-      })
-    );
-  };
+
   return (
-    <div className="home">
-      <h1 className="text-4xl font-bold mb-4 text-primary">
-        Welcome to the {appName} {isAuth && user.fname} <Smile size={44} className='inline' />
+    <div className="home dark:text-white">
+      <h1 className="text-4xl text-center font-bold mb-4 ">
+        Welcome to the {appName} {isAuth && user.fname}{' '}
+        <Smile size={44} className="inline" />
       </h1>
-      <MessageList messages={messages.map((m) => (m?.user.id === user.id ? {...m, editable: true} : m))} />
+      <MessageList
+        onMessageUpdate={updateMessage}
+        removeMessage={removeMessage}
+        messages={isMember ? messages.map((m) =>
+          m?.user.id === user.id ? { ...m, editable: true } : m
+        ) : messages}
+      />
 
       <section className="mt-5 dark:text-white">
         <h2>
@@ -61,7 +51,6 @@ export default function Home() {
           for more information
         </h2>
       </section>
-
     </div>
   );
 }

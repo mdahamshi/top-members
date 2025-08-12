@@ -14,14 +14,13 @@ export function sanitizeUser(user) {
   };
 }
 
-export function sanitizeMessage(message, isMember) {
+export function sanitizeMessage(message) {
   if (!message) return null;
-  if (isMember) {
-    return message;
-  }
+
   return {
     id: message.id,
     content: message.content,
     title: message.title,
+    pinned: message.pinned,
   };
 }

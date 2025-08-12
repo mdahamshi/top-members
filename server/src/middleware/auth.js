@@ -30,3 +30,14 @@ export const ensureSelfOrAdmin = (req, res, next) => {
   }
   res.status(403).json({ error: 'Access denied' });
 }
+
+export const ensureSelfOrAdminMesgDel = (req, res, next) => {
+  if (
+    req.isAuthenticated &&
+    req.isAuthenticated() &&
+    (req.user.role === 'admin' || req.user.id === Number(req.user.id))
+  ) {
+    return next();
+  }
+  res.status(403).json({ error: 'Access denied' });
+}

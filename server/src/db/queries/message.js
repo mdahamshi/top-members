@@ -4,35 +4,42 @@ const queries = {
   create: 'INSERT INTO messages (content, title, user_id) VALUES ($1, $2, $3) RETURNING *',
   update: 'UPDATE messages SET content = $1, title = $2, user_id = $3 WHERE id = $4 RETURNING *',
   delete: 'DELETE FROM messages WHERE id = $1',
-  getAllPublic: 'SELECT id, title, content FROM messages ORDER BY id ASC',
+  getAllPublic: 'SELECT id, title,pinned, content FROM messages ORDER BY pinned DESC, created_at DESC;',
   getAllAuth: `
   SELECT 
       m.id,
       m.title,
       m.content,
+      m.pinned,
       m.created_at,
       jsonb_build_object(
         'id', u.id,
-        'username', u.username
+        'username', u.username,
+        'fname', u.fname,
+        'lname', u.lname
       ) AS user
     FROM messages AS m
     LEFT JOIN users AS u
       ON m.user_id = u.id
-    ORDER BY m.id ASC;`,
+    ORDER BY pinned DESC, created_at DESC;`,
   getByIdPublic: 'SELECT id, title, content FROM messages WHERE id = $1',
   getByIdAuth: 'SELECT id, title, content, user_id, created_at FROM messages WHERE id = $1',
   getMessagesByUser: `
     SELECT 
       m.id,
       m.content,
+      m.pinned,
       m.created_at,
       json_build_object(
         'id', u.id,
-        'username', u.username
+        'username', u.username,
+        'fname', u.fname,
+        'lname', u.lname
       ) AS user
     FROM messages m
     JOIN users u ON m.user_id = u.id
-    WHERE m.user_id = $1;
+    WHERE m.user_id = $1
+    ORDER BY pinned DESC, created_at DESC;
   `,
 };
 
@@ -50,7 +57,7 @@ const message = {
     return res.rows[0];
   },
   update: async (params = []) => {
-    const res = await update(queries.update, params);
+    const res = await query(queries.update, params);
     return res.rows[0];
   },
   delete: async (params = []) => {

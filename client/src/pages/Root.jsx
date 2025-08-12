@@ -7,6 +7,8 @@ import { getRandomColor } from '@sarawebs/sb-utils';
 import { useApp } from '../context/AppContext';
 import Copyright from '../components/Copyright';
 import { useMessages } from '../context/MessageContext';
+import { Link } from 'react-router-dom';
+import { MessageCircle } from 'lucide-react';
 import MessageSender from '../components/MessageSender';
 const colors = [
   '345 75% 31%', // #8e1330
@@ -48,11 +50,14 @@ export default function Root() {
       <Header />
 
       <main key={location.pathname}>
-        <div className="wrap">
-          {<Outlet />}
-        </div>
+        <div className="wrap">{<Outlet />}</div>
       </main>
-      <MessageSender />
+      <Link
+        className="clickable bg-primary text-white fixed bottom-4 p-0 right-4 z-50 shadow-lg w-14 h-14 rounded-full flex items-center justify-center "
+        to='/messages/new'
+      >
+        <MessageCircle size={24} strokeWidth={3} />
+      </Link>
       <Footer className="mt-auto p-2 dark:bg-primaryDark">
         <Copyright appName={appName} />
       </Footer>

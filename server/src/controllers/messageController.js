@@ -37,8 +37,8 @@ export const updateMessage = async (req, res, next) => {
     const id = parseInt(req.params.id);
     const { content, title } = req.body;
     const user_id = req.user.id;
-    const updatedItem = await db.message.update([title, content, user_id, id]);
-    res.json(updatedItem);
+    const updatedItem = await db.message.update([content, title, user_id, id]);
+    res.json({...req.body,...updatedItem});
   } catch (error) {
     next(error);
   }
@@ -47,8 +47,8 @@ export const updateMessage = async (req, res, next) => {
 export const deleteMessage = async (req, res, next) => {
   try {
     const id = parseInt(req.params.id);
-    await db.message.delete([id]);
-    res.json({ message: 'Message deleted' });
+    const message = await db.message.delete([id]);
+    res.json({ message: message });
   } catch (error) {
     next(error);
   }
@@ -63,7 +63,7 @@ export const getMessagesByUser = async (req, res, next) => {
     if(fullMessage)
       res.json(items);
     else
-      res.json(sanitizeMessage(items));
+      res.json(items.map((msg) => sanitizeMessage(msg)));
   } catch (error) {
     next(error);
   }

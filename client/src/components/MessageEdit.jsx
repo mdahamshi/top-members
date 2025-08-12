@@ -5,15 +5,14 @@ import { SendHorizontal } from 'lucide-react';
 import { useMessages } from '../context/MessageContext';
 
 const MessageEdit = ({ onCancelSave, msg }) => {
-  const [name, setName] = useState(msg.name);
-  const [text, setText] = useState(msg.text);
-  const { editMessage } = useMessages();
+  const [title, setName] = useState(msg.title);
+  const [content, setText] = useState(msg.content);
 
   const handleUpdate = async (e) => {
     e.preventDefault();
-    if (name !== msg.name || text !== msg.text)
-      editMessage(msg.id, { name, text });
-    onCancelSave();
+    if (title !== msg.title || content !== msg.content)
+      onCancelSave(msg.id, { ...msg, title, content });
+    else onCancelSave(null);
   };
 
   return (
@@ -27,13 +26,13 @@ const MessageEdit = ({ onCancelSave, msg }) => {
 
       <div>
         <div className="mb-2 block">
-          <Label htmlFor="name">Your name</Label>
+          <Label htmlFor="name">Title</Label>
         </div>
         <TextInput
-          id="name"
+          id="title"
           type="text"
           placeholder="Your Name"
-          value={name}
+          value={title}
           onChange={(event) => setName(event.target.value)}
           required
         />
@@ -46,7 +45,7 @@ const MessageEdit = ({ onCancelSave, msg }) => {
         <Textarea
           rows={4}
           id="text"
-          value={text}
+          value={content}
           onChange={(event) => setText(event.target.value)}
           required
           placeholder="A brief message to the TOP folks"
