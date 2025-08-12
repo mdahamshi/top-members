@@ -1,21 +1,21 @@
 services:
   postgres:
     image: postgres:15
-    container_name: saramsg_postgres
+    container_name: salma_members_postgres
     restart: always
     environment:
       POSTGRES_DB: ${SERVICE_USER_POSTGRES}
       POSTGRES_USER: ${SERVICE_USER_POSTGRES}
       POSTGRES_PASSWORD: ${SERVICE_PASSWORD_POSTGRES}
     volumes:
-      - pgdata_saramsg:/var/lib/postgresql/data
+      - pgdata_salma_members:/var/lib/postgresql/data
       - ./server/src/db/init:/docker-entrypoint-initdb.d
     networks:
-      - saramsg
+      - salma_members
 
   server:
     build: ./server
-    container_name: saramsg_server
+    container_name: salma_members_server
     restart: always
     environment:
       POSTGRES_DB: ${SERVICE_USER_POSTGRES}
@@ -26,7 +26,7 @@ services:
     depends_on:
       - postgres
     networks:
-      - saramsg
+      - salma_members
     healthcheck:
       test: ["CMD-SHELL", "curl -f $SERVICE_URL_CLIENT/api/health || exit 1"]
       interval: 30s
@@ -35,13 +35,13 @@ services:
 
   client:
     build: ./client
-    container_name: saramsg_client
+    container_name: salma_members_client
     restart: always
     networks:
-      - saramsg
+      - salma_members
 
 volumes:
-  pgdata_saramsg:
+  pgdata_salma_members:
 
 networks:
-  saramsg:
+  salma_members:
