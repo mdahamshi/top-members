@@ -1,0 +1,47 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: saramsg_postgres
+    restart: always
+    environment:
+      POSTGRES_DB: ${SERVICE_USER_POSTGRES}
+      POSTGRES_USER: ${SERVICE_USER_POSTGRES}
+      POSTGRES_PASSWORD: ${SERVICE_PASSWORD_POSTGRES}
+    volumes:
+      - pgdata_saramsg:/var/lib/postgresql/data
+      - ./server/src/db/init:/docker-entrypoint-initdb.d
+    networks:
+      - saramsg
+
+  server:
+    build: ./server
+    container_name: saramsg_server
+    restart: always
+    environment:
+      POSTGRES_DB: ${SERVICE_USER_POSTGRES}
+      POSTGRES_USER: ${SERVICE_USER_POSTGRES}
+      POSTGRES_PASSWORD: ${SERVICE_PASSWORD_POSTGRES}
+      DATABASE_URL: postgres://${SERVICE_USER_POSTGRES}:${SERVICE_PASSWORD_POSTGRES}@postgres:5432/${SERVICE_USER_POSTGRES}
+      MEMBERSHIP_PASSCODE: 'stop the war on gaza'
+    depends_on:
+      - postgres
+    networks:
+      - saramsg
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f $SERVICE_URL_CLIENT/api/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 2
+
+  client:
+    build: ./client
+    container_name: saramsg_client
+    restart: always
+    networks:
+      - saramsg
+
+volumes:
+  pgdata_saramsg:
+
+networks:
+  saramsg:

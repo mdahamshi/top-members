@@ -1,0 +1,27 @@
+#!/usr/bin/env node
+
+import  bcrypt from 'bcrypt';
+
+async function hashPassword(password) {
+  try {
+    const hash = await bcrypt.hash(password, 10);
+    console.log(`${password} -> ${hash}`);
+  } catch (err) {
+    console.error('Error hashing password:', err);
+  }
+}
+
+async function main() {
+  const passwords = process.argv.slice(2);
+  if (passwords.length === 0) {
+    console.log('Usage: bcrypt-cli <password1> [password2 ...]');
+    process.exit(1);
+  }
+
+  for (const pwd of passwords) {
+    await hashPassword(pwd);
+  }
+}
+
+main();
+
