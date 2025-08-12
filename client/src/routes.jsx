@@ -15,7 +15,7 @@ export const routefromelement = createRoutesFromElements(
   <Route path="/" element={<Root />}>
     <Route errorElement={<Errorpage />}>
       <Route index element={<Home />} />
-      <Route path='/login' element={<LoginPage />} />
+      <Route path="/login" element={<LoginPage />} />
       <Route path="/logout" element={<Logout />} />
       <Route path="/join" element={<Join />} />
       <Route path="/register" element={<RegisterPage />} />

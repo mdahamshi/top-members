@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import NotAuth from '../pages/NotAuth';
 
 import { Card, Label, TextInput, Button, Alert } from 'flowbite-react';
 import SmartButton from './SmartButton';
 import { useAuth } from '../context/AuthContext';
 import { Frown } from 'lucide-react';
 export default function Unjoin() {
-  const { joinClub, isAuth, loading } = useAuth();
+  const { joinClub, isAuth, loading, isMember } = useAuth();
   const [error, setError] = useState(null);
   const navigate = useNavigate();
   const [message, setMessage] = useState(null);
@@ -23,7 +24,21 @@ export default function Unjoin() {
       setError('Failed to unsubscribe');
     }
   };
-  if (!isAuth) navigate('/');
+  if (!isAuth)
+    return (
+      <NotAuth
+        msg="You are not logged in on this site !"
+        link={{ text: 'Login', id: 'login' }}
+      />
+    );
+  console.log(isMember);
+  if (!isMember && !message)
+    return (
+      <NotAuth
+        msg="You are not a member!"
+        link={{ text: 'Join', id: 'join' }}
+      />
+    );
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-50 dark:bg-gray-900">
       <Card className="w-full max-w-md">

@@ -10,8 +10,7 @@ export function getNavbarLinks(isAuth, user, inLinks = null) {
 
     if (user?.membership_status === false) {
       finalLinks.push(userStatusLinks.join);
-    }
-    else {
+    } else {
       finalLinks.push(userStatusLinks.unjoin);
     }
   }

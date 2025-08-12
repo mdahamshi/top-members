@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import NotAuth from '../pages/NotAuth';
 
 export default function Logout() {
   const { logout, isAuth } = useAuth();
@@ -13,10 +14,10 @@ export default function Logout() {
       } catch (err) {
         console.error('Logout failed:', err);
       }
-      navigate('/', { replace: true });
+      setTimeout(() => navigate('/', { replace: true }), 2500);
     };
     if (isAuth) doLogout();
   }, []);
 
-  return null;
+  return <NotAuth title="Bye !" msg="Logging you out, come back soon :)" />;
 }

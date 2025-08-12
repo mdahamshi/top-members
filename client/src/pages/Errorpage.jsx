@@ -7,7 +7,7 @@ export default function Errorpage() {
 
   return (
     <div className="text-primary flex flex-col items-center justify-center p-8 font-sans text-cente dark:text-white">
-      <h1 className='text-8xl mb-4 font-bold'>404</h1>
+      <h1 className="text-8xl mb-4 font-bold">404</h1>
       <p className="text-2xl mb-2">
         {' '}
         <i>{error.statusText || error.message}</i>

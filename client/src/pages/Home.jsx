@@ -16,10 +16,9 @@ export default function Home() {
     update: updateMessage,
     remove: removeMessage,
   } = useCrud(api.messages);
-  const { isAuth, user, isMember } = useAuth();
+  const { isAuth, user } = useAuth();
 
   const { appName } = useApp();
-
 
   useEffect(() => {
     getMessages();
@@ -34,9 +33,7 @@ export default function Home() {
       <MessageList
         onMessageUpdate={updateMessage}
         removeMessage={removeMessage}
-        messages={isMember ? messages.map((m) =>
-          m?.user.id === user.id ? { ...m, editable: true } : m
-        ) : messages}
+        messages={messages}
       />
 
       <section className="mt-5 dark:text-white">

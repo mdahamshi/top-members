@@ -40,8 +40,8 @@ function MessageModal({ error, open, onClose, onSubmit }) {
     await onSubmit({ title, content: text });
     setTitle('');
     setText('');
-    setMsg('Message Sent !')
-    setTimeout(() =>handleClose() , 1500);
+    setMsg('Message Sent !');
+    setTimeout(() => handleClose(), 1500);
   }
 
   return (
@@ -88,7 +88,11 @@ function MessageModal({ error, open, onClose, onSubmit }) {
             </div>
 
             <div className="w-full flex justify-end">
-              <Button type="submit" className="btn-primary flex gap-4" disabled={message} >
+              <Button
+                type="submit"
+                className="btn-primary flex gap-4"
+                disabled={message}
+              >
                 {message ? 'Sending...' : 'Send'}
                 <SendHorizontal />
               </Button>

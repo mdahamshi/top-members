@@ -14,7 +14,7 @@ const MessageBubble = ({
   avatarColor = '#6C63FF',
 }) => {
   const [edit, setEdit] = useState(false);
-  const {  created_at, editable, title } = { ...msg };
+  const { created_at, editable, title } = { ...msg };
   const username = msg?.user?.username;
   const name = msg?.user?.fname;
   const messageDelete = async () => {

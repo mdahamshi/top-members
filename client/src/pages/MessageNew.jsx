@@ -32,25 +32,25 @@ export default function MessageNew() {
   }
 
   if (!isAuth) return null;
-    const [title, setTitle] = useState('');
-    const [text, setText] = useState('');
-    const [message, setMsg] = useState('');
-    function handleClose() {
-      setTitle('');
-      setText('');
-      setMsg('');
-      navigate('/');
-    }
-  
-    async function handleSend(e) {
-      e.preventDefault();
-      await addMessage({ title, content: text });
-      setTitle('');
-      setText('');
-      setMsg('Message Sent !')
-      setTimeout(() =>handleClose() , 1500);
-    }
-  
+  const [title, setTitle] = useState('');
+  const [text, setText] = useState('');
+  const [message, setMsg] = useState('');
+  function handleClose() {
+    setTitle('');
+    setText('');
+    setMsg('');
+    navigate('/');
+  }
+
+  async function handleSend(e) {
+    e.preventDefault();
+    await addMessage({ title, content: text });
+    setTitle('');
+    setText('');
+    setMsg('Message Sent !');
+    setTimeout(() => handleClose(), 1500);
+  }
+
   return (
     <form className="max-w-md w-full mx-auto space-y-6" onSubmit={handleSend}>
       <h3 className="text-xl font-medium text-gray-900 dark:text-white">

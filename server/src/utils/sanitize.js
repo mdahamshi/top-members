@@ -1,7 +1,6 @@
 // utils/sanitize.js
 
 export function sanitizeUser(user) {
-
   if (!user) return null;
   return {
     id: user.id,
@@ -14,13 +13,20 @@ export function sanitizeUser(user) {
   };
 }
 
-export function sanitizeMessage(message) {
-  if (!message) return null;
-
-  return {
+export function sanitizeMessage(message, user) {
+  const defualtMesg = {
     id: message.id,
     content: message.content,
     title: message.title,
     pinned: message.pinned,
   };
+  if (!user) return defualtMesg;
+
+  if (!message) return null;
+  if (user.role === "admin") return { ...message, editable: true };
+  if (user.membership_status)
+    if (user.id === message.user.id) {
+      return { ...message, editable: true };
+    } else return message;
+  return defualtMesg;
 }

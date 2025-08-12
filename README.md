@@ -27,6 +27,7 @@ It features a clean UI, user authentication, editable messages, pinned posts, an
 ## 🛠 Tech Stack
 
 **Frontend**
+
 - [React](https://reactjs.org/)
 - [Flowbite React](https://flowbite-react.com/) (Tailwind-based UI components)
 - [Lucide React](https://lucide.dev/) (icons)
@@ -34,12 +35,14 @@ It features a clean UI, user authentication, editable messages, pinned posts, an
 - [date-fns](https://date-fns.org/) (date formatting)
 
 **Backend**
+
 - REST API (compatible with CRUD operations in `useCrud` hook)
 - PostgreSQL (example seed data included)
 - Node.js / Express (example API layer)
 - exposed by cloudflare tunnel
 - coolify
 - proxmox
+
 ---
 
 ## 📦 Installation
@@ -54,3 +57,4 @@ npm install
 
 # Start development server
 npm run dev
+```

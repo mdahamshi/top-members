@@ -100,9 +100,10 @@ button:hover,
   --bgPrimary: rgb(8, 11, 36);
 }
 
-.btn-primary, .link-btn {
-  @apply bg-primary dark:bg-primary hover:bg-primary/65 dark:hover:bg-primary/65 relative inline-flex items-center justify-center rounded-md  px-4 py-2 text-white font-medium  disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors duration-200 ;
+.btn-primary,
+.link-btn {
+  @apply bg-primary dark:bg-primary hover:bg-primary/65 dark:hover:bg-primary/65 relative inline-flex items-center justify-center rounded-md  px-4 py-2 text-white font-medium  disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors duration-200;
 }
 .link-btn {
-  @apply text-white p-2 rounded-md
+  @apply text-white p-2 rounded-md;
 }

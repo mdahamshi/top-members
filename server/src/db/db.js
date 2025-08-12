@@ -1,8 +1,9 @@
-import user from './queries/user.js';
-import message from './queries/message.js';
+import user from "./queries/user.js";
+import message from "./queries/message.js";
 
 const db = {
   user,
-  message,};
+  message,
+};
 
 export default db;

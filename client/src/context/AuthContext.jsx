@@ -14,6 +14,7 @@ export const AuthProvider = ({ children }) => {
 
   const isAuth = !!user;
   const isMember = isAuth && user.membership_status;
+  const isAdmin = isAuth && user.role === 'admin';
 
   const request = async (url, options = {}) => {
     const res = await fetch(url, {
@@ -125,7 +126,6 @@ export const AuthProvider = ({ children }) => {
       await request(api.auth, {
         method: 'GET',
       });
-
     } catch (err) {
       setError(err.message);
     } finally {
@@ -152,6 +152,7 @@ export const AuthProvider = ({ children }) => {
         clearError,
         search,
         isMember,
+        isAdmin,
       }}
     >
       {children}

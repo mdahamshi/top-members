@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { Button, Label, TextInput, Card, Alert, Spinner } from 'flowbite-react';
 import { useNavigate } from 'react-router-dom';
+import NotAuth from './NotAuth';
 import SmartButton from '../components/SmartButton';
 export default function RegisterPage() {
   const { login, loading, error, register, isAuth, clearError, search } =
@@ -17,10 +18,6 @@ export default function RegisterPage() {
   const [passwordError, setPasswordError] = useState(null);
   const navigate = useNavigate();
   useEffect(() => {
-    if (isAuth) {
-      setTimeout(() => navigate('/'), 1500);
-    }
-
     clearError();
   }, [isAuth]);
   const handleChange = async (e) => {
@@ -39,7 +36,13 @@ export default function RegisterPage() {
       }
     }
   };
-
+  if (isAuth && !success)
+    return (
+      <NotAuth
+        msg="You are logged in on this site !"
+        link={{ text: 'Logout', id: 'logout' }}
+      />
+    );
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSuccess(null);
@@ -60,6 +63,7 @@ export default function RegisterPage() {
       throw new Error('Registration failed');
     }
     setSuccess('Account created! Logging you in...');
+    setTimeout(() => navigate('/'), 1500);
   };
 
   return (

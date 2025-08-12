@@ -1,10 +1,13 @@
-import { query } from '../pool.js';
+import { query } from "../pool.js";
 
 const queries = {
-  create: 'INSERT INTO messages (content, title, user_id) VALUES ($1, $2, $3) RETURNING *',
-  update: 'UPDATE messages SET content = $1, title = $2, user_id = $3 WHERE id = $4 RETURNING *',
-  delete: 'DELETE FROM messages WHERE id = $1',
-  getAllPublic: 'SELECT id, title,pinned, content FROM messages ORDER BY pinned DESC, created_at DESC;',
+  create:
+    "INSERT INTO messages (content, title, user_id) VALUES ($1, $2, $3) RETURNING *",
+  update:
+    "UPDATE messages SET content = $1, title = $2, user_id = $3 WHERE id = $4 RETURNING *",
+  delete: "DELETE FROM messages WHERE id = $1",
+  getAllPublic:
+    "SELECT id, title,pinned, content FROM messages ORDER BY pinned DESC, created_at DESC;",
   getAllAuth: `
   SELECT 
       m.id,
@@ -22,8 +25,9 @@ const queries = {
     LEFT JOIN users AS u
       ON m.user_id = u.id
     ORDER BY pinned DESC, created_at DESC;`,
-  getByIdPublic: 'SELECT id, title, content FROM messages WHERE id = $1',
-  getByIdAuth: 'SELECT id, title, content, user_id, created_at FROM messages WHERE id = $1',
+  getByIdPublic: "SELECT id, title, content FROM messages WHERE id = $1",
+  getByIdAuth:
+    "SELECT id, title, content, user_id, created_at FROM messages WHERE id = $1",
   getMessagesByUser: `
     SELECT 
       m.id,
@@ -49,7 +53,10 @@ const message = {
     return res.rows;
   },
   getById: async (params = [], isAuth) => {
-    const res = await query(isAuth ? queries.getByIdAuth : queries.getByIdPublic, params);
+    const res = await query(
+      isAuth ? queries.getByIdAuth : queries.getByIdPublic,
+      params,
+    );
     return res.rows[0];
   },
   create: async (params = []) => {

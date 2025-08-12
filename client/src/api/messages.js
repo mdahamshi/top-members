@@ -1,4 +1,3 @@
-
 const API_URL = `/api/v1/messages`;
 
 const parseJSON = async (res) => {

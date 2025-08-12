@@ -1,27 +1,26 @@
-import request from 'supertest';
-import {app} from '../index.js';          // your Express app
-import db from '../db/db.js';         // DB module to mock
-import { generatePasswordHash } from '../utils/passport.js';
+import request from "supertest";
+import { app } from "../index.js"; // your Express app
+import db from "../db/db.js"; // DB module to mock
+import { generatePasswordHash } from "../utils/passport.js";
 
 // Mock DB module functions used by controller
-jest.mock('../db/db.js');
+jest.mock("../db/db.js");
 
 // Mock password hashing for speed
-jest.mock('../utils/passport.js', () => ({
-  generatePasswordHash: jest.fn(() => Promise.resolve('hashedPassword')),
+jest.mock("../utils/passport.js", () => ({
+  generatePasswordHash: jest.fn(() => Promise.resolve("hashedPassword")),
 }));
 
-const api = '/api/v1/users'; 
+const api = "/api/v1/users";
 
-
-describe('User API', () => {
+describe("User API", () => {
   const testUser = {
     id: 1,
-    username: 'testuser',
-    fname: 'Test',
-    lname: 'User',
-    password_hash: 'hashedPassword',
-    role: 'user',
+    username: "testuser",
+    fname: "Test",
+    lname: "User",
+    password_hash: "hashedPassword",
+    role: "user",
   };
 
   beforeEach(() => {
@@ -39,12 +38,11 @@ describe('User API', () => {
     // If you control route registration, insert mockLoginMiddleware before your user routes
     // Example:
     // app.use('/users', mockLoginMiddleware, userRoutes);
-
     // Or you can patch app.post('/users', ...) dynamically for tests if needed
   });
 
-  describe('POST /users', () => {
-    it('should create a new user and login', async () => {
+  describe("POST /users", () => {
+    it("should create a new user and login", async () => {
       // DB: no existing user with username
       db.user.getByUsername.mockResolvedValue(null);
 
@@ -63,64 +61,64 @@ describe('User API', () => {
       });
 
       const res = await request(app).post(`${api}`).send({
-        username: 'testuser',
-        password: 'password123',
-        fname: 'Test',
-        lname: 'User',
-        role: 'user',
+        username: "testuser",
+        password: "password123",
+        fname: "Test",
+        lname: "User",
+        role: "user",
       });
 
       expect(res.statusCode).toBe(201);
-      expect(res.body).toHaveProperty('message', 'Registration successful');
+      expect(res.body).toHaveProperty("message", "Registration successful");
       expect(res.body.user).toMatchObject({
-        username: 'testuser',
-        fname: 'Test',
-        lname: 'User',
-        role: 'user',
+        username: "testuser",
+        fname: "Test",
+        lname: "User",
+        role: "user",
       });
 
-      expect(db.user.getByUsername).toHaveBeenCalledWith(['testuser']);
-      expect(generatePasswordHash).toHaveBeenCalledWith('password123');
+      expect(db.user.getByUsername).toHaveBeenCalledWith(["testuser"]);
+      expect(generatePasswordHash).toHaveBeenCalledWith("password123");
       expect(db.user.create).toHaveBeenCalledWith([
-        'testuser',
-        'Test',
-        'User',
-        'hashedPassword',
-        'user',
+        "testuser",
+        "Test",
+        "User",
+        "hashedPassword",
+        "user",
       ]);
     });
 
-    it('should reject duplicate username', async () => {
+    it("should reject duplicate username", async () => {
       db.user.getByUsername.mockResolvedValue(testUser);
 
       const res = await request(app).post(`${api}`).send({
-        username: 'testuser',
-        password: 'anyPassword',
+        username: "testuser",
+        password: "anyPassword",
       });
 
       expect(res.statusCode).toBe(409);
-      expect(res.body).toHaveProperty('error', 'Username already taken');
+      expect(res.body).toHaveProperty("error", "Username already taken");
     });
   });
 
-  describe('GET /users', () => {
-    it('should return all users sanitized', async () => {
+  describe("GET /users", () => {
+    it("should return all users sanitized", async () => {
       const users = [
         {
           id: 1,
-          username: 'user1',
-          password_hash: 'hash',
-          fname: 'F',
-          lname: 'L',
-          role: 'user',
+          username: "user1",
+          password_hash: "hash",
+          fname: "F",
+          lname: "L",
+          role: "user",
         },
         {
           id: 2,
-          username: 'user2',
-          password_hash: 'hash',
-          fname: 'F2',
-          lname: 'L2',
-          role: 'admin',
+          username: "user2",
+          password_hash: "hash",
+          fname: "F2",
+          lname: "L2",
+          role: "admin",
         },
       ];
       db.user.getAll.mockResolvedValue(users);
@@ -131,13 +129,13 @@ describe('User API', () => {
       expect(res.body.length).toBe(2);
       // Make sure password_hash is removed by sanitizeUser (you can mock sanitizeUser or test shape)
       res.body.forEach((user) => {
-        expect(user).not.toHaveProperty('password_hash');
+        expect(user).not.toHaveProperty("password_hash");
       });
     });
   });
 
-  describe('GET /users/:id', () => {
-    it('should return user by id sanitized', async () => {
+  describe("GET /users/:id", () => {
+    it("should return user by id sanitized", async () => {
       db.user.getById.mockResolvedValue(testUser);
 
       const res = await request(app).get(`${api}/1`);
@@ -145,98 +143,103 @@ describe('User API', () => {
       expect(res.statusCode).toBe(200);
       expect(res.body).toMatchObject({
         id: 1,
-        username: 'testuser',
-        fname: 'Test',
-        lname: 'User',
-        role: 'user',
+        username: "testuser",
+        fname: "Test",
+        lname: "User",
+        role: "user",
       });
-      expect(res.body).not.toHaveProperty('password_hash');
+      expect(res.body).not.toHaveProperty("password_hash");
     });
 
-    it('should return 404 if user not found', async () => {
+    it("should return 404 if user not found", async () => {
       db.user.getById.mockResolvedValue(null);
 
       const res = await request(app).get(`${api}/9999`);
 
       expect(res.statusCode).toBe(404);
-      expect(res.body).toHaveProperty('error', 'User not found');
+      expect(res.body).toHaveProperty("error", "User not found");
     });
   });
 
-  describe('PUT /users/:id', () => {
-    it('should update user fields except username', async () => {
+  describe("PUT /users/:id", () => {
+    it("should update user fields except username", async () => {
       db.user.getById.mockResolvedValue(testUser);
 
       const updatedUser = {
         ...testUser,
-        fname: 'Updated',
-        lname: 'Name',
-        role: 'admin',
-        password_hash: 'hashedPassword',
+        fname: "Updated",
+        lname: "Name",
+        role: "admin",
+        password_hash: "hashedPassword",
       };
 
       db.user.update.mockResolvedValue(updatedUser);
 
       const res = await request(app)
         .put(`${api}/1`)
-        .send({ fname: 'Updated', lname: 'Name', role: 'admin', username: 'newusername' });
+        .send({
+          fname: "Updated",
+          lname: "Name",
+          role: "admin",
+          username: "newusername",
+        });
 
       expect(res.statusCode).toBe(200);
       expect(db.user.getById).toHaveBeenCalledWith([1]);
       expect(db.user.update).toHaveBeenCalledWith([
-        'hashedPassword',
-        'Updated',
-        'Name',
-        'admin',
+        "hashedPassword",
+        "Updated",
+        "Name",
+        "admin",
         1,
       ]);
       expect(res.body).toMatchObject({
-        fname: 'Updated',
-        lname: 'Name',
-        role: 'admin',
+        fname: "Updated",
+        lname: "Name",
+        role: "admin",
       });
-      expect(res.body).not.toHaveProperty('password_hash');
+      expect(res.body).not.toHaveProperty("password_hash");
     });
 
-    it('should hash password if password provided', async () => {
+    it("should hash password if password provided", async () => {
       db.user.getById.mockResolvedValue(testUser);
       db.user.update.mockResolvedValue(testUser);
 
       const res = await request(app)
         .put(`${api}/1`)
-        .send({ password: 'newpass123' });
+        .send({ password: "newpass123" });
 
-      expect(generatePasswordHash).toHaveBeenCalledWith('newpass123');
+      expect(generatePasswordHash).toHaveBeenCalledWith("newpass123");
       expect(db.user.update).toHaveBeenCalled();
 
       expect(res.statusCode).toBe(200);
     });
 
-    it('should return 404 if user not found', async () => {
+    it("should return 404 if user not found", async () => {
       db.user.getById.mockResolvedValue(null);
 
       const res = await request(app)
         .put(`${api}/9999`)
-        .send({ fname: 'Noone' });
+        .send({ fname: "Noone" });
 
       expect(res.statusCode).toBe(404);
-      expect(res.body).toHaveProperty('error', 'User not found');
+      expect(res.body).toHaveProperty("error", "User not found");
     });
   });
 
-  describe('DELETE /users/:id', () => {
-    it('should delete user and return success message', async () => {
+  describe("DELETE /users/:id", () => {
+    it("should delete user and return success message", async () => {
       db.user.delete.mockResolvedValue();
 
       const res = await request(app).delete(`${api}/1`);
 
       expect(db.user.delete).toHaveBeenCalledWith([1]);
       expect(res.statusCode).toBe(200);
-      expect(res.body).toHaveProperty('message', 'User deleted');
+      expect(res.body).toHaveProperty("message", "User deleted");
     });
 
-    it('should handle errors gracefully', async () => {
-      db.user.delete.mockRejectedValue(new Error('Delete failed'));
+    it("should handle errors gracefully", async () => {
+      db.user.delete.mockRejectedValue(new Error("Delete failed"));
 
       const res = await request(app).delete(`${api}/1`);
 

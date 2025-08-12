@@ -18,7 +18,7 @@ export const MessageProvider = ({ children }) => {
         ...msg,
         text: msg.content,
       }));
-      
+
       setMessages(messagesWithText);
     } catch (err) {
       console.error('Failed to fetch messages', err);
@@ -58,9 +58,7 @@ export const MessageProvider = ({ children }) => {
       const res = await messagesApi.updateMessage(id, payload);
       // Update frontend message with updatedData (keep text unchanged in UI)
       setMessages((prev) =>
-        prev.map((msg) =>
-          msg.id === id ? { ...msg, ...updatedData } : msg
-        )
+        prev.map((msg) => (msg.id === id ? { ...msg, ...updatedData } : msg))
       );
     } catch (err) {
       console.error('Failed to update message', err);
