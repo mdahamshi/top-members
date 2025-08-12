@@ -10,7 +10,7 @@ export function AppProvider({ children }) {
   const [theme, setTheme] = useState(() => {
     return localStorage.getItem('theme') || 'light';
   });
-  const appName = 'SaraMessage';
+  const appName = 'SalmaMembers';
   useEffect(() => {
     const saved = localStorage.getItem('theme');
     if (saved) setTheme(saved);
