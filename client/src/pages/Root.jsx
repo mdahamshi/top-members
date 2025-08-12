@@ -2,14 +2,12 @@ import React, { useEffect } from 'react';
 import Header from '../components/Header';
 import { Outlet, useLocation } from 'react-router-dom';
 import Footer from '../components/Footer';
-import LoadingOverlay from '../components/LoadingOverly';
 import { getRandomColor } from '@sarawebs/sb-utils';
 import { useApp } from '../context/AppContext';
 import Copyright from '../components/Copyright';
-import { useMessages } from '../context/MessageContext';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import { MessageCircle } from 'lucide-react';
-import MessageSender from '../components/MessageSender';
 const colors = [
   '345 75% 31%', // #8e1330
   '43 66% 32%', // #8a6c1d
