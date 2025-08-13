@@ -25,7 +25,10 @@ export const AuthProvider = ({ children }) => {
       },
       ...options,
     });
-
+    if (!res.ok) {
+      const errorText = await res.json();
+      throw new Error(JSON.stringify(errorText) || 'Request failed');
+    }
     if (res.status !== 204) return res.json();
     return null;
   };
@@ -87,7 +90,7 @@ export const AuthProvider = ({ children }) => {
       setError(null);
       return data;
     } catch (err) {
-      setError(err.message);
+      return JSON.parse(err.message);
     } finally {
       setLoading(false);
     }

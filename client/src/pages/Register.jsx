@@ -38,10 +38,11 @@ export default function RegisterPage() {
         } else {
           setSuccess(null);
           setAvailable(false);
-          setError(res.error);
+          if (res.error) setError(res.error);
         }
       } catch (err) {
         setSuccess(null);
+        console.log(error);
       }
     }
   };
@@ -74,7 +75,6 @@ export default function RegisterPage() {
     setSuccess('Account created! Logging you in...');
     setTimeout(() => navigate('/'), 1500);
   };
-
   return (
     <div className="flex justify-center items-center  bg-gray-50 dark:bg-gray-900">
       <Card className="w-full max-w-md shadow-md">
