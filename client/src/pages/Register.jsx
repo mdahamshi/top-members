@@ -86,7 +86,7 @@ export default function RegisterPage() {
           </Alert>
         )}
 
-        <form className="flex flex-col gap-4">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <div>
             <div className="mb-2 block">
               <Label htmlFor="firstName">First Name</Label>
@@ -169,11 +169,7 @@ export default function RegisterPage() {
             )}
           </div>
 
-          <SmartButton
-            disabled={isAuth}
-            onClick={handleSubmit}
-            className="btn-primary"
-          >
+          <SmartButton disabled={isAuth} type="submit" className="btn-primary">
             {isAuth ? 'Signing in...' : 'Register'}
           </SmartButton>
         </form>

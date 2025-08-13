@@ -59,12 +59,10 @@ export const createUser = async (req, res, next) => {
 
     return req.login(newUser, (err) => {
       if (err) return next(err);
-      res
-        .status(201)
-        .json({
-          message: "Registration successful",
-          user: sanitizeUser(newUser),
-        });
+      res.status(201).json({
+        message: "Registration successful",
+        user: sanitizeUser(newUser),
+      });
     });
   } catch (err) {
     next(err);

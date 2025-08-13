@@ -175,14 +175,12 @@ describe("User API", () => {
 
       db.user.update.mockResolvedValue(updatedUser);
 
-      const res = await request(app)
-        .put(`${api}/1`)
-        .send({
-          fname: "Updated",
-          lname: "Name",
-          role: "admin",
-          username: "newusername",
-        });
+      const res = await request(app).put(`${api}/1`).send({
+        fname: "Updated",
+        lname: "Name",
+        role: "admin",
+        username: "newusername",
+      });
 
       expect(res.statusCode).toBe(200);
       expect(db.user.getById).toHaveBeenCalledWith([1]);

@@ -52,7 +52,7 @@ export default function Join() {
           </Alert>
         )}
 
-        <form className="flex flex-col gap-4 mt-4">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4 mt-4">
           <div>
             <Label htmlFor="passcode" value="Passcode" />
             <TextInput
@@ -71,7 +71,7 @@ export default function Join() {
 
           <SmartButton
             disabled={error === null && message}
-            onClick={handleSubmit}
+            type="submit"
             className="btn-primary"
           >
             {error === null && message ? 'Loading...' : 'Join'}
