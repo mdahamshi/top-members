@@ -107,3 +107,7 @@ button:hover,
 .link-btn {
   @apply text-white p-2 rounded-md;
 }
+
+.nav-link {
+  @apply p-2  border border-transparent  dark:text-white text-primary hover:border-current;
+}

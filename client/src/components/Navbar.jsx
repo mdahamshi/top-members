@@ -15,10 +15,9 @@ export default function Navbar({ inLinks = null, onLinkClick }) {
               onClick={onLinkClick}
               to={`/${link.id === 'home' ? '' : link.id}`}
               className={({ isActive }) =>
-                [
-                  'clickable p-2 dark:text-white text-primary hover:font-bold hover:border',
-                  isActive ? 'font-bold border' : '',
-                ].join(' ')
+                ['nav-link', isActive && 'font-bold !border-current']
+                  .filter(Boolean)
+                  .join(' ')
               }
             >
               {link.text}
