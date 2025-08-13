@@ -54,7 +54,7 @@ export default function MessageNew() {
   if (loading) return <LoadingOverlay />;
 
   return (
-    <form className="max-w-md w-full mx-auto space-y-6" onSubmit={handleSend}>
+    <form className=" card" onSubmit={handleSend}>
       <h3 className="text-xl font-medium text-gray-900 dark:text-white">
         Send New Message
       </h3>
