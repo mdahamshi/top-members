@@ -23,13 +23,12 @@ services:
       POSTGRES_PASSWORD: ${SERVICE_PASSWORD_POSTGRES}
       DATABASE_URL: postgres://${SERVICE_USER_POSTGRES}:${SERVICE_PASSWORD_POSTGRES}@postgres:5432/${SERVICE_USER_POSTGRES}
       MEMBERSHIP_PASSCODE: "stop the war on gaza"
-      PORT: 4000
     depends_on:
       - postgres
     networks:
       - salma_members
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://client:80/api/health || exit 1"]
+      test: ["CMD-SHELL", "curl -f $SERVICE_URL_CLIENT/api/health || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 2
@@ -38,12 +37,6 @@ services:
     build: ./client
     container_name: salma_members_client
     restart: always
-    healthcheck:
-      test:
-        [
-          "CMD-SHELL",
-          "curl -f http://${SERVICE_FQDN_SERVER_4000}/api/health || exit 1",
-        ]
     networks:
       - salma_members
 
