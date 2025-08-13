@@ -3,6 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import { Button, Label, TextInput, Card, Alert, Spinner } from 'flowbite-react';
 import { useNavigate } from 'react-router-dom';
 import NotAuth from './NotAuth';
+import { Check, X } from 'lucide-react';
 import SmartButton from '../components/SmartButton';
 export default function RegisterPage() {
   const { login, loading, error, register, isAuth, clearError, search } =
@@ -15,7 +16,9 @@ export default function RegisterPage() {
     confirmPassword: '',
   });
   const [success, setSuccess] = useState(null);
+  const [localErr, setError] = useState(null);
   const [passwordError, setPasswordError] = useState(null);
+  const [available, setAvailable] = useState(null);
   const navigate = useNavigate();
   useEffect(() => {
     clearError();
@@ -30,6 +33,12 @@ export default function RegisterPage() {
         const res = await search(e.target.value);
         if (res.available) {
           setSuccess(res.message);
+          setAvailable(true);
+          setError(null);
+        } else {
+          setSuccess(null);
+          setAvailable(false);
+          setError(res.error);
         }
       } catch (err) {
         setSuccess(null);
@@ -73,11 +82,12 @@ export default function RegisterPage() {
           Create an Account
         </h2>
 
-        {error && (
+        {(error || localErr) && (
           <Alert color="failure" className="sticky  top-16 z-50 mb-4 shadow-md">
             {JSON.parse(error)?.errors?.msg ||
               JSON.parse(error)?.error ||
-              error}
+              error ||
+              localErr}
           </Alert>
         )}
         {success && (
@@ -123,16 +133,21 @@ export default function RegisterPage() {
             <div className="mb-2 block">
               <Label htmlFor="username">Username</Label>
             </div>
-            <TextInput
-              id="username"
-              name="username"
-              type="text"
-              autoComplete="username"
-              placeholder="Your username"
-              value={form.username}
-              onChange={handleChange}
-              required
-            />
+            <div className="flex items-center gap-2 ">
+              <TextInput
+                id="username"
+                name="username"
+                type="text"
+                className="grow"
+                autoComplete="username"
+                placeholder="Your username"
+                value={form.username}
+                onChange={handleChange}
+                required
+              />
+              {available === true && <Check color="green" />}
+              {available === false && <X color="red" />}
+            </div>
           </div>
 
           <div>
@@ -169,7 +184,11 @@ export default function RegisterPage() {
             )}
           </div>
 
-          <SmartButton disabled={isAuth} type="submit" className="btn-primary">
+          <SmartButton
+            disabled={isAuth || !available}
+            type="submit"
+            className="btn-primary"
+          >
             {isAuth ? 'Signing in...' : 'Register'}
           </SmartButton>
         </form>

@@ -25,11 +25,7 @@ export const AuthProvider = ({ children }) => {
       },
       ...options,
     });
-    if (!res.ok) {
-      const errorText = await res.text();
-      throw new Error(errorText || 'Request failed');
-    }
-    // Assume JSON response if not a logout
+
     if (res.status !== 204) return res.json();
     return null;
   };
@@ -92,7 +88,6 @@ export const AuthProvider = ({ children }) => {
       return data;
     } catch (err) {
       setError(err.message);
-      throw err;
     } finally {
       setLoading(false);
     }
