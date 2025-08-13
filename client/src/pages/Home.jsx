@@ -28,8 +28,8 @@ export default function Home() {
   return (
     <div className="home dark:text-white">
       <h1 className="text-4xl text-center font-bold mb-8 ">
-        Welcome to the {appName}, {isAuth && user.fname}{' '}
-        <Smile size={44} className="inline" />
+        Welcome to the {appName} {isAuth && `, ${user.fname} `}
+        <Smile size={44} className="align-bottom inline" />
       </h1>
       <MessageList
         onMessageUpdate={updateMessage}
