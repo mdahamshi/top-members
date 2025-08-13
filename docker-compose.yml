@@ -34,7 +34,7 @@ services:
     networks:
       - salma_members
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://client:80/api/health || exit 1"]
+      test: ["CMD-SHELL", "curl -f http://server:4000/api/health || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 2
@@ -44,7 +44,7 @@ services:
     container_name: salma_members_client
     restart: always
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://server:4000/api/health || exit 1"]
+      test: ["CMD-SHELL", "curl -f http://client:80/api/health || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 2
