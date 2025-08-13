@@ -76,123 +76,121 @@ export default function RegisterPage() {
     setTimeout(() => navigate('/'), 1500);
   };
   return (
-    <div className="flex justify-center items-center  bg-gray-50 dark:bg-gray-900">
-      <Card className="w-full max-w-md shadow-md">
-        <h2 className="text-2xl font-bold text-center text-primary mb-4">
-          Create an Account
-        </h2>
+    <Card className="w-full m-auto max-w-md shadow-md">
+      <h2 className="text-2xl font-bold text-center text-primary mb-4">
+        Create an Account
+      </h2>
 
-        {(error || localErr) && (
-          <Alert color="failure" className="sticky  top-16 z-50 mb-4 shadow-md">
-            {JSON.parse(error)?.errors?.msg ||
-              JSON.parse(error)?.error ||
-              error ||
-              localErr}
-          </Alert>
-        )}
-        {success && (
-          <Alert color="success" className="sticky top-16 z-50 mb-4 shadow-md">
-            {success}
-          </Alert>
-        )}
+      {(error || localErr) && (
+        <Alert color="failure" className="sticky  top-16 z-50 mb-4 shadow-md">
+          {JSON.parse(error)?.errors?.msg ||
+            JSON.parse(error)?.error ||
+            error ||
+            localErr}
+        </Alert>
+      )}
+      {success && (
+        <Alert color="success" className="sticky top-16 z-50 mb-4 shadow-md">
+          {success}
+        </Alert>
+      )}
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-          <div>
-            <div className="mb-2 block">
-              <Label htmlFor="firstName">First Name</Label>
-            </div>
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <div>
+          <div className="mb-2 block">
+            <Label htmlFor="firstName">First Name</Label>
+          </div>
+          <TextInput
+            id="firstName"
+            name="firstName"
+            autoComplete="given-name"
+            type="text"
+            placeholder="Your first name"
+            value={form.firstName}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        <div>
+          <div className="mb-2 block">
+            <Label htmlFor="lastName">Last Name</Label>
+          </div>
+          <TextInput
+            id="lastName"
+            name="lastName"
+            autoComplete="family-name"
+            type="text"
+            placeholder="Your last name"
+            value={form.lastName}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        <div>
+          <div className="mb-2 block">
+            <Label htmlFor="username">Username</Label>
+          </div>
+          <div className="flex items-center gap-2 ">
             <TextInput
-              id="firstName"
-              name="firstName"
-              autoComplete="given-name"
+              id="username"
+              name="username"
               type="text"
-              placeholder="Your first name"
-              value={form.firstName}
+              className="grow"
+              autoComplete="username"
+              placeholder="Your username"
+              value={form.username}
               onChange={handleChange}
               required
             />
+            {available === true && <Check color="green" />}
+            {available === false && <X color="red" />}
           </div>
+        </div>
 
-          <div>
-            <div className="mb-2 block">
-              <Label htmlFor="lastName">Last Name</Label>
-            </div>
-            <TextInput
-              id="lastName"
-              name="lastName"
-              autoComplete="family-name"
-              type="text"
-              placeholder="Your last name"
-              value={form.lastName}
-              onChange={handleChange}
-              required
-            />
+        <div>
+          <div className="mb-2 block">
+            <Label htmlFor="password">Password</Label>
           </div>
+          <TextInput
+            id="password"
+            name="password"
+            type="password"
+            autoComplete="new-password"
+            placeholder="••••••••"
+            value={form.password}
+            onChange={handleChange}
+            required
+          />
+        </div>
 
-          <div>
-            <div className="mb-2 block">
-              <Label htmlFor="username">Username</Label>
-            </div>
-            <div className="flex items-center gap-2 ">
-              <TextInput
-                id="username"
-                name="username"
-                type="text"
-                className="grow"
-                autoComplete="username"
-                placeholder="Your username"
-                value={form.username}
-                onChange={handleChange}
-                required
-              />
-              {available === true && <Check color="green" />}
-              {available === false && <X color="red" />}
-            </div>
+        <div>
+          <div className="mb-2 block">
+            <Label htmlFor="confirmPassword">Confirm password</Label>
           </div>
+          <TextInput
+            id="confirmPassword"
+            name="confirmPassword"
+            type="password"
+            placeholder="••••••••"
+            value={form.confirmPassword}
+            onChange={handleChange}
+            required
+          />
+          {passwordError && (
+            <p className="text-red-600 text-sm mt-1">{passwordError}</p>
+          )}
+        </div>
 
-          <div>
-            <div className="mb-2 block">
-              <Label htmlFor="password">Password</Label>
-            </div>
-            <TextInput
-              id="password"
-              name="password"
-              type="password"
-              autoComplete="new-password"
-              placeholder="••••••••"
-              value={form.password}
-              onChange={handleChange}
-              required
-            />
-          </div>
-
-          <div>
-            <div className="mb-2 block">
-              <Label htmlFor="confirmPassword">Confirm password</Label>
-            </div>
-            <TextInput
-              id="confirmPassword"
-              name="confirmPassword"
-              type="password"
-              placeholder="••••••••"
-              value={form.confirmPassword}
-              onChange={handleChange}
-              required
-            />
-            {passwordError && (
-              <p className="text-red-600 text-sm mt-1">{passwordError}</p>
-            )}
-          </div>
-
-          <SmartButton
-            disabled={isAuth || !available}
-            type="submit"
-            className="btn-primary"
-          >
-            {isAuth ? 'Signing in...' : 'Register'}
-          </SmartButton>
-        </form>
-      </Card>
-    </div>
+        <SmartButton
+          disabled={isAuth || !available}
+          type="submit"
+          className="btn-primary"
+        >
+          {isAuth ? 'Signing in...' : 'Register'}
+        </SmartButton>
+      </form>
+    </Card>
   );
 }

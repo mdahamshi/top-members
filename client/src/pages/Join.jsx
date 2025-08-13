@@ -38,7 +38,7 @@ export default function Join() {
       />
     );
   return (
-    <div className="flex  items-center justify-center bg-gray-50 dark:bg-gray-900">
+    <div className="flex  items-center justify-center">
       <Card className="w-full max-w-md">
         <h1 className="text-2xl font-bold text-center text-gray-800 dark:text-white mb-4">
           Join Club

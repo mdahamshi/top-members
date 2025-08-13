@@ -39,15 +39,16 @@ const MessageBubble = ({
     );
   return (
     <div className="dark:text-white  flex flex-col p-4   rounded-md shadow-md  dark:bg-primaryDark  justify-between gap-3 py-2">
-      {msg.pinned && <Pin className="relative top-0 ml-auto right-0 m-2" />}
-
       {created_at && (
-        <div>
-          <div className="flex gap-3 justify-center">
-            <span className="ml-2 text-xs text-gray-400">
-              {format(new Date(created_at), 'PPP, p')}
-            </span>
-          </div>
+        <div className="relative mt-2 flex justify-center items-center w-full">
+          <span className="text-xs text-gray-400 whitespace-nowrap">
+            {format(new Date(created_at), 'PPP, p')}
+          </span>
+          {msg.pinned && (
+            <div className="absolute top-0 right-0">
+              <Pin className="m-2" />
+            </div>
+          )}
         </div>
       )}
       <div className="flex gap-3 ">
@@ -59,7 +60,7 @@ const MessageBubble = ({
         </div>
 
         <div className="flex flex-col ">
-          <div className="flex justify-between items-start">
+          <div className="flex mb-4 justify-between items-start">
             {title && <h2 className="text-2xl">{title}</h2>}
           </div>
           <div className="bg-primary w-fit   mb-2 break-words  inline-block text-white  px-4 py-2 rounded-xl mt-1  ">

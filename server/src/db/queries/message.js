@@ -2,9 +2,9 @@ import { query } from "../pool.js";
 
 const queries = {
   create:
-    "INSERT INTO messages (content, title, user_id) VALUES ($1, $2, $3) RETURNING *",
+    "INSERT INTO messages (content, title, user_id, pinned) VALUES ($1, $2, $3, $4) RETURNING *",
   update:
-    "UPDATE messages SET content = $1, title = $2, user_id = $3 WHERE id = $4 RETURNING *",
+    "UPDATE messages SET content = $1, title = $2, user_id = $3, pinned = $4 WHERE id = $5 RETURNING *",
   delete: "DELETE FROM messages WHERE id = $1",
   getAllPublic:
     "SELECT id, title,pinned, content FROM messages ORDER BY pinned DESC, created_at DESC;",

@@ -27,9 +27,15 @@ export const getMessageById = async (req, res, next) => {
 };
 export const createMessage = async (req, res, next) => {
   try {
-    const { content, title } = req.body;
+    const { content, title, pinned } = req.body;
+    if (req.user?.role !== "admin") pinned = false;
     const user_id = req.user.id;
-    const newItem = await db.message.create([title, content, user_id]);
+    const newItem = await db.message.create([
+      title,
+      content,
+      user_id,
+      pinned || false,
+    ]);
     res.status(201).json(sanitizeMessage(newItem, req.user));
   } catch (error) {
     next(error);
@@ -39,9 +45,16 @@ export const createMessage = async (req, res, next) => {
 export const updateMessage = async (req, res, next) => {
   try {
     const id = parseInt(req.params.id);
-    const { content, title } = req.body;
+    const { content, title, pinned } = req.body;
+    if (req.user?.role !== "admin") pinned = false;
     const user_id = req.body.user.id;
-    const updatedItem = await db.message.update([content, title, user_id, id]);
+    const updatedItem = await db.message.update([
+      content,
+      title,
+      user_id,
+      pinned,
+      id,
+    ]);
     res.json({ ...req.body, ...updatedItem });
   } catch (error) {
     next(error);

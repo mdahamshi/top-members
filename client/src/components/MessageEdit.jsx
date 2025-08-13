@@ -1,18 +1,25 @@
 'use client';
-import { Button, Label, TextInput, Textarea } from 'flowbite-react';
+import { Button, Label, TextInput, Textarea, Checkbox } from 'flowbite-react';
 import { useState } from 'react';
 import { SendHorizontal } from 'lucide-react';
 import { useMessages } from '../context/MessageContext';
-
+import { useAuth } from '../context/AuthContext';
 const MessageEdit = ({ onCancelSave, msg }) => {
   const [title, setName] = useState(msg.title);
   const [content, setText] = useState(msg.content);
+  const [pinned, setPinned] = useState(msg.pinned || false);
 
+  const { isAdmin } = useAuth();
   const handleUpdate = async (e) => {
     e.preventDefault();
-    if (title !== msg.title || content !== msg.content)
-      onCancelSave(msg.id, { ...msg, title, content });
-    else onCancelSave(null);
+    const hasChanges =
+      title !== msg.title || content !== msg.content || pinned !== msg.pinned;
+
+    if (hasChanges) {
+      onCancelSave(msg.id, { ...msg, title, content, pinned });
+    } else {
+      onCancelSave(null);
+    }
   };
 
   return (
@@ -51,6 +58,17 @@ const MessageEdit = ({ onCancelSave, msg }) => {
           placeholder="A brief message to the TOP folks"
         />
       </div>
+      {isAdmin && (
+        <div className="flex items-center gap-2">
+          <Checkbox
+            id="pinned"
+            checked={pinned}
+            className="text-primary"
+            onChange={(e) => setPinned(e.target.checked)}
+          />
+          <Label htmlFor="pinned">Pinned</Label>
+        </div>
+      )}
 
       <div className="w-full flex gap-4 justify-end">
         <Button

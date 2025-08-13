@@ -8,6 +8,7 @@ import {
   createTheme,
   TextInput,
   Alert,
+  Checkbox,
   Textarea,
 } from 'flowbite-react';
 
@@ -20,7 +21,7 @@ import { useNavigate } from 'react-router-dom';
 import LoadingOverlay from '../components/LoadingOverly';
 
 export default function MessageNew() {
-  const { isAuth } = useAuth();
+  const { isAuth, isAdmin } = useAuth();
   const { create: addMessage, error, loading } = useCrud(api.messages); // assuming useCrud has create method for 'messages'
   const navigate = useNavigate();
 
@@ -35,6 +36,7 @@ export default function MessageNew() {
   if (!isAuth) return null;
   const [title, setTitle] = useState('');
   const [text, setText] = useState('');
+  const [pinned, setPinned] = useState(false);
   const [message, setMsg] = useState('');
   function handleClose() {
     setTitle('');
@@ -45,7 +47,7 @@ export default function MessageNew() {
 
   async function handleSend(e) {
     e.preventDefault();
-    await addMessage({ title, content: text });
+    await addMessage({ title, content: text, pinned });
     setTitle('');
     setText('');
     setMsg('Message Sent !');
@@ -83,7 +85,17 @@ export default function MessageNew() {
           placeholder="A brief message to the TOP folks"
         />
       </div>
-
+      {isAdmin && (
+        <div className="flex items-center gap-2">
+          <Checkbox
+            id="pinned"
+            className="text-primary"
+            checked={pinned}
+            onChange={(e) => setPinned(e.target.checked)}
+          />
+          <Label htmlFor="pinned">Pinned</Label>
+        </div>
+      )}
       <div className="w-full flex justify-end">
         <Button
           type="submit"
