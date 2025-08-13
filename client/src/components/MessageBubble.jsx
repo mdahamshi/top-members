@@ -33,7 +33,9 @@ const MessageBubble = ({
         msg={msg}
         onCancelSave={(id, data) => {
           setEdit(false);
-          if (data) onSave(id, data);
+          if (data) {
+            onSave(id, data);
+          }
         }}
       />
     );
