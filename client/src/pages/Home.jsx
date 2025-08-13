@@ -28,8 +28,8 @@ export default function Home() {
   if (loading) return <LoadingOverlay />;
   return (
     <div className="home dark:text-white">
-      <h1 className="text-4xl text-center font-bold mb-4 ">
-        Welcome to the {appName} {isAuth && user.fname}{' '}
+      <h1 className="text-4xl text-center font-bold mb-8 ">
+        Welcome to the {appName}, {isAuth && user.fname}{' '}
         <Smile size={44} className="inline" />
       </h1>
       <MessageList

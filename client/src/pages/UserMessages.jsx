@@ -29,7 +29,6 @@ export default function UserMessages() {
     );
 
   const messageUser = messages[0]?.user;
-  console.log(messages);
   return (
     <>
       <h1 className="text-4xl text-center font-bold mb-4 text-primary">
