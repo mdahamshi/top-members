@@ -18,12 +18,12 @@ export default function UserMessages() {
     remove: removeMessage,
     loading,
   } = useCrud(`${api.usersMessages(id)}`);
-  const { user, isMember } = useAuth();
+  const { user, isMember, isAdmin } = useAuth();
   useEffect(() => {
     if (!loading) getMessages();
   }, [id, isMember]);
   if (loading) return <LoadingOverlay />;
-  if (!isMember)
+  if (!isMember && !isAdmin)
     return (
       <NotAuth msg="You are not member!" link={{ text: 'Join', id: 'join' }} />
     );
