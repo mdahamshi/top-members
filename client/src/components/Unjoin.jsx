@@ -31,7 +31,6 @@ export default function Unjoin() {
         link={{ text: 'Login', id: 'login' }}
       />
     );
-  console.log(isMember);
   if (!isMember && !message)
     return (
       <NotAuth
