@@ -16,6 +16,7 @@ const MessageBubble = ({
   const [edit, setEdit] = useState(false);
   const { created_at, editable, title } = { ...msg };
   const username = msg?.user?.username;
+  const isMember = !!msg?.user?.username;
   const name = msg?.user?.fname;
   const messageDelete = async () => {
     const confirmed = window.confirm(
@@ -51,7 +52,7 @@ const MessageBubble = ({
       )}
       <div className="flex gap-3 ">
         <div
-          className="w-12 text-2xl h-12 rounded-full shrink-0 flex items-center justify-center text-white font-bold "
+          className={`${!isMember ? 'rotate-90' : ''} w-12 text-2xl h-12 rounded-full shrink-0 flex items-center justify-center text-white font-bold `}
           style={{ backgroundColor: avatarColor }}
         >
           {getInitials(name)}
