@@ -17,10 +17,11 @@ import { useAuth } from '../context/AuthContext';
 import { useCrud } from '@sarawebs/sb-hooks';
 import api from '../api/urls';
 import { useNavigate } from 'react-router-dom';
+import LoadingOverlay from '../components/LoadingOverly';
 
 export default function MessageNew() {
   const { isAuth } = useAuth();
-  const { create: addMessage, error } = useCrud(api.messages); // assuming useCrud has create method for 'messages'
+  const { create: addMessage, error, loading } = useCrud(api.messages); // assuming useCrud has create method for 'messages'
   const navigate = useNavigate();
 
   async function handleSubmit(data) {
@@ -50,6 +51,7 @@ export default function MessageNew() {
     setMsg('Message Sent !');
     setTimeout(() => handleClose(), 1500);
   }
+  if (loading) return <LoadingOverlay />;
 
   return (
     <form className="max-w-md w-full mx-auto space-y-6" onSubmit={handleSend}>

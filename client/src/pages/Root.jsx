@@ -1,12 +1,14 @@
 import React, { useEffect } from 'react';
 import Header from '../components/Header';
-import { Outlet, useLocation } from 'react-router-dom';
+import { Outlet, useLocation, useNavigation } from 'react-router-dom';
 import Footer from '../components/Footer';
 import { getRandomColor } from '@sarawebs/sb-utils';
 import { useApp } from '../context/AppContext';
 import Copyright from '../components/Copyright';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import LoadingOverlay from '../components/LoadingOverly';
+
 import { MessageCircle } from 'lucide-react';
 const colors = [
   '345 75% 31%', // #8e1330
@@ -36,6 +38,8 @@ export default function Root() {
   const { appName } = useApp();
   const location = useLocation();
   const { user, isAuth } = useAuth();
+  const navigation = useNavigation();
+  const isLoading = navigation.state === 'loading';
 
   useEffect(() => {
     document.documentElement.style.setProperty(
@@ -49,6 +53,7 @@ export default function Root() {
       <Header />
 
       <main key={location.pathname}>
+        {isLoading && <LoadingOverlay />}
         <div className="wrap">{<Outlet />}</div>
       </main>
       {isAuth && (

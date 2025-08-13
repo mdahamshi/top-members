@@ -11,7 +11,7 @@ import api from '../api/urls';
 import Navbarsb from './Navbar';
 import { SendHorizonal, Sun, Moon, CircleUser } from 'lucide-react';
 import { useApp } from '../context/AppContext';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 export default function Component() {
   const { appName, theme, toggleTheme } = useApp();
@@ -29,7 +29,7 @@ export default function Component() {
   }, []);
   return (
     <Navbar ref={navRef} className="sticky top-0 z-5 shadow-md">
-      <NavbarBrand href="/">
+      <NavbarBrand href="/" as={Link}>
         <SendHorizonal className="size-10 mr-5 stroke-primary" />
         <span className="self-center text-primary whitespace-nowrap text-2xl font-semibold">
           {appName}

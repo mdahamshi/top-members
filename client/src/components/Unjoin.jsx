@@ -39,7 +39,7 @@ export default function Unjoin() {
       />
     );
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50 dark:bg-gray-900">
+    <div className="flex self-center items-center justify-center bg-gray-50 dark:bg-gray-900">
       <Card className="w-full max-w-md">
         <Frown size={40} className="self-center text-primary" />
         <h1 className="text-2xl font-bold text-center text-gray-800 dark:text-white mb-4">

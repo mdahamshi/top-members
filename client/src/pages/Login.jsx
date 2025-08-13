@@ -21,13 +21,17 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50 dark:bg-gray-900">
+    <div className="flex  items-center justify-center bg-gray-50 dark:bg-gray-900">
       <Card className="w-full max-w-md">
         <h1 className="text-2xl self-start font-bold text-center text-gray-800 dark:text-white">
           Login
         </h1>
         {error && (
-          <Alert color="failure" className="mb-4" aria-live="assertive">
+          <Alert
+            color="failure"
+            className="sticky  top-16 z-50 mb-4 shadow-md"
+            aria-live="assertive"
+          >
             {JSON.parse(error)?.error}
           </Alert>
         )}

@@ -9,21 +9,23 @@ import { Button } from 'flowbite-react';
 import { useCrud } from '@sarawebs/sb-hooks';
 import MessageList from '../components/MessageList';
 import api from '../api/urls';
+import LoadingOverlay from '../components/LoadingOverly';
 export default function Home() {
   const {
     data: messages,
     load: getMessages,
     update: updateMessage,
     remove: removeMessage,
+    loading,
   } = useCrud(api.messages);
-  const { isAuth, user } = useAuth();
+  const { isAuth, isMember, user } = useAuth();
 
   const { appName } = useApp();
 
   useEffect(() => {
     getMessages();
-  }, []);
-
+  }, [isAuth, isMember, user]);
+  if (loading) return <LoadingOverlay />;
   return (
     <div className="home dark:text-white">
       <h1 className="text-4xl text-center font-bold mb-4 ">

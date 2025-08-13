@@ -6,6 +6,8 @@ import { useParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import api from '../api/urls';
 import { useEffect } from 'react';
+import LoadingOverlay from '../components/LoadingOverly';
+import NotAuth from './NotAuth';
 export default function UserMessages() {
   const { id } = useParams();
   const {
@@ -19,7 +21,7 @@ export default function UserMessages() {
   useEffect(() => {
     if (!loading) getMessages();
   }, [id, isMember]);
-  if (loading) return <>Loading...</>;
+  if (loading) return <LoadingOverlay />;
   if (!isMember)
     return (
       <NotAuth msg="You are not member!" link={{ text: 'Join', id: 'join' }} />

@@ -67,21 +67,21 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="flex justify-center items-center  bg-gray-50 dark:bg-gray-900">
       <Card className="w-full max-w-md shadow-md">
         <h2 className="text-2xl font-bold text-center text-primary mb-4">
           Create an Account
         </h2>
 
         {error && (
-          <Alert color="failure" className="mb-4">
+          <Alert color="failure" className="sticky  top-16 z-50 mb-4 shadow-md">
             {JSON.parse(error)?.errors?.msg ||
               JSON.parse(error)?.error ||
               error}
           </Alert>
         )}
         {success && (
-          <Alert color="success" className="mb-4">
+          <Alert color="success" className="sticky top-16 z-50 mb-4 shadow-md">
             {success}
           </Alert>
         )}
