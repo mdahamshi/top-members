@@ -19,6 +19,7 @@ const queries = {
         'id', u.id,
         'username', u.username,
         'fname', u.fname,
+        'role', u.role,
         'lname', u.lname
       ) AS user
     FROM messages AS m
@@ -38,6 +39,7 @@ const queries = {
         'id', u.id,
         'username', u.username,
         'fname', u.fname,
+        'role', u.role,
         'lname', u.lname
       ) AS user
     FROM messages m
