@@ -33,6 +33,7 @@ const queries = {
     SELECT 
       m.id,
       m.content,
+      m.title,
       m.pinned,
       m.created_at,
       json_build_object(

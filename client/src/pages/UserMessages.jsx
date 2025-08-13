@@ -14,10 +14,10 @@ export default function UserMessages() {
   const {
     data: messages,
     load: getMessages,
-    update: updateMessage,
     remove: removeMessage,
     loading,
   } = useCrud(`${api.usersMessages(id)}`);
+  const { update: updateMessage } = useCrud(`${api.messages}`);
   const { user, isMember, isAdmin } = useAuth();
   useEffect(() => {
     if (!loading) getMessages();

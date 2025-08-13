@@ -25,7 +25,6 @@ export default function Home() {
   useEffect(() => {
     getMessages();
   }, [isAuth, isMember, user]);
-  if (loading) return <LoadingOverlay />;
   return (
     <div className="home dark:text-white">
       <h1 className="text-4xl text-center font-bold mb-8 ">

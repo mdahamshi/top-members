@@ -31,7 +31,7 @@ const MessageEdit = ({ onCancelSave, msg }) => {
         <TextInput
           id="title"
           type="text"
-          placeholder="Your Name"
+          placeholder="Title"
           value={title}
           onChange={(event) => setName(event.target.value)}
           required
