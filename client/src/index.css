@@ -26,6 +26,7 @@
   -moz-osx-font-smoothing: grayscale;
   box-sizing: border-box;
   font-size: 1rem;
+  scrollbar-gutter: stable;
 
   --lite-gray: #f0f1f4;
   --label-width: 120px;
@@ -84,6 +85,7 @@ body {
   min-height: 100dvh;
   background-color: var(--bgPrimary);
 }
+
 .clickable:hover,
 button:hover,
 .link-btn:hover {
@@ -102,12 +104,13 @@ button:hover,
 
 .btn-primary,
 .link-btn {
-  @apply bg-primary dark:bg-primary hover:bg-primary/65 dark:hover:bg-primary/65 relative inline-flex items-center justify-center rounded-md  px-4 py-2 text-white font-medium  disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors duration-200;
+  @apply bg-primary dark:bg-primary hover:bg-primary/65 dark:hover:bg-primary/65 relative inline-flex items-center justify-center rounded-md px-4 py-2 text-white font-medium disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors duration-200;
 }
+
 .link-btn {
   @apply text-white p-2 rounded-md;
 }
 
 .nav-link {
-  @apply p-2  border border-transparent  dark:text-white text-primary hover:border-current;
+  @apply p-2 border border-transparent dark:text-white text-primary hover:border-current;
 }
