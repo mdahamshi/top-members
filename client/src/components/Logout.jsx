@@ -14,7 +14,7 @@ export default function Logout() {
       } catch (err) {
         console.error('Logout failed:', err);
       }
-      setTimeout(() => navigate('/', { replace: true }), 2500);
+      setTimeout(() => navigate('/', { replace: true }), 1500);
     };
     if (isAuth) doLogout();
   }, []);

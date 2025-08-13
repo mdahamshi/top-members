@@ -144,8 +144,13 @@ export default function RegisterPage() {
               onChange={handleChange}
               required
             />
-            {available === true && <Check color="green" />}
-            {available === false && <X color="red" />}
+            {loading ? (
+              <Spinner size="sm" />
+            ) : available === true ? (
+              <Check color="green" />
+            ) : available === false ? (
+              <X color="red" />
+            ) : null}
           </div>
         </div>
 
