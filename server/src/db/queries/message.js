@@ -10,11 +10,7 @@ const queries = {
     "SELECT id, title,pinned, content FROM messages ORDER BY pinned DESC, created_at DESC;",
   getAllAuth: `
   SELECT 
-      m.id,
-      m.title,
-      m.content,
-      m.pinned,
-      m.created_at,
+      m.*,
       jsonb_build_object(
         'id', u.id,
         'username', u.username,
