@@ -18,7 +18,7 @@ export default function Unjoin() {
     setError(null);
     const res = await joinClub();
     if (res) {
-      setMessage(res.message);
+      setMessage(res.data.message);
       setTimeout(() => navigate('/'), 1500);
     } else {
       setError('Failed to unsubscribe');

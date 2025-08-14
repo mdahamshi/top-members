@@ -1,7 +1,8 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState } from 'react';
+import { useCrud } from '@sarawebs/sb-hooks';
 import api from '../api/urls';
-const USER_STORAGE_KEY = 'auth_user';
 
+const USER_STORAGE_KEY = 'auth_user';
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -9,148 +10,61 @@ export const AuthProvider = ({ children }) => {
     const stored = localStorage.getItem(USER_STORAGE_KEY);
     return stored ? JSON.parse(stored) : null;
   });
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+
+  const { loading, error, create, loadOne, search, update, clearError } =
+    useCrud(api.auth);
 
   const isAuth = !!user;
   const isMember = isAuth && user.membership_status;
   const isAdmin = isAuth && user.role === 'admin';
-
-  const request = async (url, options = {}) => {
-    const res = await fetch(url, {
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-        ...(options.headers || {}),
-      },
-      ...options,
-    });
-    if (!res.ok) {
-      const errorText = await res.json();
-      throw new Error(JSON.stringify(errorText) || 'Request failed');
+  const updateUSer = (user) => {
+    if (user) {
+      setUser(user);
+      localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(user));
     }
-    if (res.status !== 204) return res.json();
-    return null;
   };
-
-  // Login (POST /auth)
   const login = async (credentials) => {
-    setLoading(true);
-    setError(null);
-    try {
-      const data = await request(api.auth, {
-        method: 'POST',
-        body: JSON.stringify(credentials),
-      });
-      const userData = data.user || data;
-      setUser(userData);
-      localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(userData));
-      return userData;
-    } catch (err) {
-      setError(err.message);
-      setUser(null);
-      localStorage.removeItem(USER_STORAGE_KEY);
-      return null;
-    } finally {
-      setLoading(false);
-    }
+    const res = await create(credentials);
+    updateUSer(res?.data);
+    return res;
   };
-
-  // joinClub (PUT /auth or another endpoint) with passcode
   const joinClub = async (passcode) => {
-    setLoading(true);
-    setError(null);
-    try {
-      const data = await request(api.auth, {
-        method: 'PUT',
-        body: JSON.stringify({ passcode }),
-      });
-      if (data.user) {
-        setUser(data.user);
-        localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(data.user));
-      }
-      return data;
-    } catch (err) {
-      setError(err.message);
-      setLoading(false);
-      return null;
-    } finally {
-      setLoading(false);
-    }
+    const res = await update('', { passcode });
+
+    updateUSer(res?.data?.user);
+    return res;
   };
-  const search = async (term) => {
-    setLoading(true);
-    try {
-      const data = await request(
-        `${api.users}/check-username?search=${encodeURIComponent(term)}`,
-        {
-          method: 'GET',
-        }
-      );
-      setError(null);
-      return data;
-    } catch (err) {
-      return JSON.parse(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-  // Register (POST /users)
   const register = async (userData) => {
-    setLoading(true);
-    setError(null);
-    try {
-      const data = await request(api.users, {
-        method: 'POST',
-        body: JSON.stringify(userData),
-      });
-      if (data.user) {
-        setUser(data.user);
-        localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(data.user));
-      }
-      return data;
-    } catch (err) {
-      setError(err.message);
-      return null;
-    } finally {
-      setLoading(false);
-    }
+    const res = await create(userData, api.users);
+    updateUSer(res?.data?.user);
+    return res;
   };
 
   const logout = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      await request(api.auth, {
-        method: 'GET',
-      });
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-      setUser(null);
-      localStorage.removeItem(USER_STORAGE_KEY);
-    }
+    await loadOne('logout'); // or create(api.logout) if you have a logout POST
+    setUser(null);
+    localStorage.removeItem(USER_STORAGE_KEY);
   };
 
-  useEffect(() => {}, []);
-  const clearError = () => setError(null);
+  const searchUser = async (term) => {
+    return await search(term, `${api.users}/check-username`);
+  };
 
   return (
     <AuthContext.Provider
       value={{
         user,
         isAuth,
+        isMember,
+        isAdmin,
         loading,
         error,
         login,
         logout,
         register,
-        joinClub,
+        searchUser,
         clearError,
-        search,
-        isMember,
-        isAdmin,
+        joinClub,
       }}
     >
       {children}

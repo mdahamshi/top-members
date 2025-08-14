@@ -45,7 +45,8 @@ export const createMessage = async (req, res, next) => {
 export const updateMessage = async (req, res, next) => {
   try {
     const id = parseInt(req.params.id);
-    const { content, title, pinned } = req.body;
+    const { content, title, pinned: pinnedClient } = req.body;
+    let pinned = pinnedClient;
     if (req.user?.role !== "admin") pinned = false;
     const user_id = req.body.user.id;
     const updatedItem = await db.message.update([

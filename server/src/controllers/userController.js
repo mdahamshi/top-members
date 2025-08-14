@@ -43,14 +43,14 @@ export const createUser = async (req, res, next) => {
   const { username, password, fname, lname, role } = req.body;
 
   try {
-    const existing = await db.user.getByUsername([username]);
+    const existing = await db.user.getByUsername([username.trim()]);
     if (existing) {
       return res.status(409).json({ error: "Username already taken" });
     }
 
     const password_hash = await generatePasswordHash(password);
     const newUser = await db.user.create([
-      username,
+      username.trim(),
       fname,
       lname,
       password_hash,

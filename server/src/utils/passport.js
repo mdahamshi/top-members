@@ -8,9 +8,11 @@ export function setupPassport() {
     new LocalStrategy(async (username, password, done) => {
       try {
         const user = await db.user.getByUsername([username]);
-        if (!user) return done(null, false, { error: "No such user" });
+        if (!user)
+          return done(null, false, { error: "Please check your username" });
         const match = await bcrypt.compare(password, user.password_hash);
-        if (!match) return done(null, false, { error: "Wrong password" });
+        if (!match)
+          return done(null, false, { error: "Please check your password" });
 
         return done(null, sanitizeUser(user));
       } catch (err) {

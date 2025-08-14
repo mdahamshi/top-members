@@ -14,7 +14,7 @@ export const authLogin = async (req, res, next) => {
     if (!user) {
       return res
         .status(401)
-        .json({ error: info?.message || "Invalid credentials" });
+        .json({ error: info?.error || "Invalid credentials" });
     }
     req.logIn(user, (err) => {
       if (err) {

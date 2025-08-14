@@ -5,9 +5,10 @@ import { useNavigate } from 'react-router-dom';
 import NotAuth from './NotAuth';
 import { Check, X } from 'lucide-react';
 import SmartButton from '../components/SmartButton';
+
 export default function RegisterPage() {
-  const { login, loading, error, register, isAuth, clearError, search } =
-    useAuth();
+  const { loading, register, isAuth, clearError, searchUser } = useAuth();
+
   const [form, setForm] = useState({
     firstName: '',
     lastName: '',
@@ -15,91 +16,96 @@ export default function RegisterPage() {
     password: '',
     confirmPassword: '',
   });
-  const [success, setSuccess] = useState(null);
-  const [localErr, setError] = useState(null);
+  const [status, setStatus] = useState({ type: null, message: null });
+
   const [passwordError, setPasswordError] = useState(null);
   const [available, setAvailable] = useState(null);
+
   const navigate = useNavigate();
-  useEffect(() => {
-    clearError();
-  }, [isAuth]);
+
+  // Handle form changes
   const handleChange = async (e) => {
-    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-    if (e.target.name === 'confirmPassword' || e.target.name === 'password') {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+
+    if (name === 'confirmPassword' || name === 'password') {
       setPasswordError(null);
     }
-    if (e.target.name === 'username' && e.target.value !== '') {
-      try {
-        const res = await search(e.target.value);
-        if (res.available) {
-          setSuccess(res.message);
-          setAvailable(true);
-          setError(null);
-        } else {
-          setSuccess(null);
-          setAvailable(false);
-          if (res.error) setError(res.error);
-        }
-      } catch (err) {
-        setSuccess(null);
-        console.log(error);
+
+    if (name === 'username' && value.trim() !== '') {
+      const { data, error } = await searchUser(value);
+      if (error) setStatus({ type: 'error', message: error });
+
+      if (data?.available) {
+        setStatus({ type: 'success', message: data.message });
+        setAvailable(true);
+      } else {
+        setAvailable(false);
       }
     }
   };
-  if (isAuth && !success)
-    return (
-      <NotAuth
-        msg="You are logged in on this site !"
-        link={{ text: 'Logout', id: 'logout' }}
-      />
-    );
+
+  // Submit registration
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setSuccess(null);
 
     if (form.password !== form.confirmPassword) {
       setPasswordError('Passwords do not match');
       return;
     }
 
-    const res = await register({
+    const { data, error } = await register({
       fname: form.firstName,
       lname: form.lastName,
       username: form.username,
       password: form.password,
     });
-    if (!res.user) {
-      setSuccess(null);
-      throw new Error('Registration failed');
+
+    if (error) {
+      setStatus({ type: 'error', message: error });
+      return;
     }
-    setSuccess('Account created! Logging you in...');
-    setTimeout(() => navigate('/'), 1500);
+
+    if (data?.user) {
+      setStatus({
+        type: 'success',
+        message: 'Account created! Logging you in...',
+      });
+      setTimeout(() => navigate('/', { replace: true }), 1500);
+    }
   };
+
+  if (isAuth && !status.type) {
+    return (
+      <NotAuth
+        msg="You are logged in on this site!"
+        link={{ text: 'Logout', id: 'logout' }}
+      />
+    );
+  }
+
   return (
     <Card className="w-full m-auto max-w-md shadow-md">
       <h2 className="text-2xl font-bold text-center text-primary mb-4">
         Create an Account
       </h2>
 
-      {(error || localErr) && (
-        <Alert color="failure" className="sticky  top-16 z-50 mb-4 shadow-md">
-          {JSON.parse(error)?.errors?.msg ||
-            JSON.parse(error)?.error ||
-            error ||
-            localErr}
+      {status.type === 'success' && (
+        <Alert color="success" className="sticky top-16 z-50 mb-4 shadow-md">
+          {status.message}
         </Alert>
       )}
-      {success && (
-        <Alert color="success" className="sticky top-16 z-50 mb-4 shadow-md">
-          {success}
+      {status.type === 'error' && (
+        <Alert color="failure" className="sticky top-16 z-50 mb-4 shadow-md">
+          {status.message}
         </Alert>
       )}
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <div>
-          <div className="mb-2 block">
-            <Label htmlFor="firstName">First Name</Label>
-          </div>
+          <Label htmlFor="firstName" className="mb-2 block">
+            First Name
+          </Label>
           <TextInput
             id="firstName"
             name="firstName"
@@ -113,9 +119,9 @@ export default function RegisterPage() {
         </div>
 
         <div>
-          <div className="mb-2 block">
-            <Label htmlFor="lastName">Last Name</Label>
-          </div>
+          <Label htmlFor="lastName" className="mb-2 block">
+            Last Name
+          </Label>
           <TextInput
             id="lastName"
             name="lastName"
@@ -129,10 +135,10 @@ export default function RegisterPage() {
         </div>
 
         <div>
-          <div className="mb-2 block">
-            <Label htmlFor="username">Username</Label>
-          </div>
-          <div className="flex items-center gap-2 ">
+          <Label htmlFor="username" className="mb-2 block">
+            Username
+          </Label>
+          <div className="flex items-center gap-2">
             <TextInput
               id="username"
               name="username"
@@ -155,9 +161,9 @@ export default function RegisterPage() {
         </div>
 
         <div>
-          <div className="mb-2 block">
-            <Label htmlFor="password">Password</Label>
-          </div>
+          <Label htmlFor="password" className="mb-2 block">
+            Password
+          </Label>
           <TextInput
             id="password"
             name="password"
@@ -171,9 +177,9 @@ export default function RegisterPage() {
         </div>
 
         <div>
-          <div className="mb-2 block">
-            <Label htmlFor="confirmPassword">Confirm password</Label>
-          </div>
+          <Label htmlFor="confirmPassword" className="mb-2 block">
+            Confirm password
+          </Label>
           <TextInput
             id="confirmPassword"
             name="confirmPassword"

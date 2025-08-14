@@ -7,21 +7,20 @@ import NotAuth from './NotAuth';
 export default function Join() {
   const [passcode, setPasscode] = useState('');
   const [message, setMessage] = useState(null);
-  const { joinClub, loading, error, isAuth, isMember } = useAuth();
+  const { joinClub, loading, error: globalErr, isAuth, isMember } = useAuth();
   const navigate = useNavigate();
+  const [error, setError] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage(null);
-    try {
-      const res = await joinClub(passcode);
-      if (res) {
-        setMessage(res.message);
-        setTimeout(() => navigate('/'), 1500);
-      }
-    } catch (err) {
-      console.log(err);
+    const { data, error } = await joinClub(passcode);
+    if (data) {
+      setMessage(data.message);
+      setTimeout(() => navigate('/'), 1500);
     }
+    if (error) setError((prev) => error);
+    else setError(null);
   };
   if (!isAuth)
     return (
@@ -46,9 +45,7 @@ export default function Join() {
         {message && <Alert color="success">{message}</Alert>}
         {error && (
           <Alert color="failure" className="mb-4">
-            {JSON.parse(error)?.errors?.msg ||
-              JSON.parse(error)?.error ||
-              error}
+            {error}
           </Alert>
         )}
 

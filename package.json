@@ -17,6 +17,6 @@
     "prettier": "3.6.1"
   },
   "dependencies": {
-    "@sarawebs/sb-hooks": "^1.0.8"
+    "@sarawebs/sb-hooks": "^1.0.10"
   }
 }
