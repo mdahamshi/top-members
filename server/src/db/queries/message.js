@@ -27,11 +27,7 @@ const queries = {
     "SELECT id, title, content, user_id, created_at FROM messages WHERE id = $1",
   getMessagesByUser: `
     SELECT 
-      m.id,
-      m.content,
-      m.title,
-      m.pinned,
-      m.created_at,
+      m.*,
       json_build_object(
         'id', u.id,
         'username', u.username,
