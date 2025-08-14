@@ -15,8 +15,6 @@ services:
     volumes:
       - pgdata_salma_members:/var/lib/postgresql/data
       - ./server/src/db/init:/docker-entrypoint-initdb.d
-    networks:
-      - salma_members
 
   server:
     build: ./server
@@ -31,8 +29,7 @@ services:
       PORT: 4000
     depends_on:
       - postgres
-    networks:
-      - salma_members
+
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://server:4000/api/health || exit 1"]
       interval: 30s
@@ -44,15 +41,14 @@ services:
     container_name: salma_members_client
     restart: always
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://salma_members_client:80/api/health || exit 1"]
+      test:
+        [
+          "CMD-SHELL",
+          "curl -f http://salma_members_client:80/api/health || exit 1",
+        ]
       interval: 30s
       timeout: 10s
       retries: 2
-    networks:
-      - salma_members
 
 volumes:
   pgdata_salma_members:
-
-networks:
-  salma_members:
