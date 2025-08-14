@@ -25,14 +25,6 @@ export default function MessageNew() {
   const { create: addMessage, error, loading } = useCrud(api.messages); // assuming useCrud has create method for 'messages'
   const navigate = useNavigate();
 
-  async function handleSubmit(data) {
-    try {
-      const res = await addMessage(data);
-    } catch (err) {
-      console.error('Error sending message:', err);
-    }
-  }
-
   if (!isAuth) return null;
   const [title, setTitle] = useState('');
   const [text, setText] = useState('');
@@ -47,11 +39,11 @@ export default function MessageNew() {
 
   async function handleSend(e) {
     e.preventDefault();
-    await addMessage({ title, content: text, pinned });
-    setTitle('');
-    setText('');
-    setMsg('Message Sent !');
-    setTimeout(() => handleClose(), 1500);
+    const { data, error } = await addMessage({ title, content: text, pinned });
+    if (!error) {
+      setMsg('Message Sent !');
+      setTimeout(() => handleClose(), 1500);
+    }
   }
   if (loading) return <LoadingOverlay />;
 

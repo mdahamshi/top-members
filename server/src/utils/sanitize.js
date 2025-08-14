@@ -14,6 +14,7 @@ export function sanitizeUser(user) {
 }
 
 export function sanitizeMessage(message, user) {
+  if (!message) return null;
   const defualtMesg = {
     id: message.id,
     content: message.content,
@@ -22,10 +23,9 @@ export function sanitizeMessage(message, user) {
   };
   if (!user) return defualtMesg;
 
-  if (!message) return null;
   if (user.role === "admin") return { ...message, editable: true };
   if (user.membership_status)
-    if (user.id === message.user.id) {
+    if (user.id === message.user_id) {
       return { ...message, editable: true };
     } else return message;
   return defualtMesg;

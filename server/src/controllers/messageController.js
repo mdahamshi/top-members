@@ -27,7 +27,8 @@ export const getMessageById = async (req, res, next) => {
 };
 export const createMessage = async (req, res, next) => {
   try {
-    const { content, title, pinned } = req.body;
+    const { content, title, pinned: pinnedClient } = req.body;
+    let pinned = pinnedClient;
     if (req.user?.role !== "admin") pinned = false;
     const user_id = req.user.id;
     const newItem = await db.message.create([
@@ -36,7 +37,8 @@ export const createMessage = async (req, res, next) => {
       user_id,
       pinned || false,
     ]);
-    res.status(201).json(sanitizeMessage(newItem, req.user));
+    const toSend = await db.message.getById([newItem.id]);
+    res.status(201).json(sanitizeMessage(toSend, req.user));
   } catch (error) {
     next(error);
   }
