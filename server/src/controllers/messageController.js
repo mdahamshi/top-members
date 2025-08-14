@@ -32,8 +32,8 @@ export const createMessage = async (req, res, next) => {
     if (req.user?.role !== "admin") pinned = false;
     const user_id = req.user.id;
     const newItem = await db.message.create([
-      title,
       content,
+      title,
       user_id,
       pinned || false,
     ]);
