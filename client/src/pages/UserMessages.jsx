@@ -28,7 +28,10 @@ export default function UserMessages() {
     return (
       <NotAuth msg="You are not member!" link={{ text: 'Join', id: 'join' }} />
     );
-
+  if (!messages || messages.length === 0)
+    return (
+      <NotAuth msg="No messages found !" link={{ text: 'Go Home', id: '' }} />
+    );
   const messageUser = messages[0]?.user;
   return (
     <>
@@ -43,7 +46,7 @@ export default function UserMessages() {
       </h1>
       <MessageList
         onMessageUpdate={(id, data) => updateMessage(id, data, api.messages)}
-        removeMessage={removeMessage}
+        removeMessage={(id) => removeMessage(id, api.messages)}
         messages={messages}
       />
     </>
