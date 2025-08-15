@@ -8,7 +8,7 @@ export default function MessageList({
 }) {
   return (
     <section className="msg-list">
-      <div className="flex flex-col  gap-4 mx-auto max-w-100">
+      <div className="flex flex-col  gap-4 mx-auto max-w-160">
         {messages.map((msg) => (
           <MessageBubble
             key={msg.id}

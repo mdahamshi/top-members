@@ -47,7 +47,7 @@ main .wrap {
   margin: auto;
   flex-grow: 1;
   max-width: var(--sb-max-content-width);
-  padding: 24px;
+  padding: 16px;
   width: 100%;
 }
 

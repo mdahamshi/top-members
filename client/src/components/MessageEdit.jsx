@@ -25,7 +25,7 @@ const MessageEdit = ({ onCancelSave, msg }) => {
   return (
     <form
       onSubmit={handleUpdate}
-      className="p-4 dark:bg-primaryDark rounded-md shadow-md space-y-6"
+      className="p-4 dark:bg-primaryDark m-auto w-full bg-white max-w-md rounded-lg shadow space-y-6"
     >
       <h3 className="text-xl font-medium text-gray-900 dark:text-white">
         Update Message
