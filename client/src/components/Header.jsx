@@ -31,7 +31,7 @@ export default function Component() {
     <Navbar ref={navRef} className="sticky top-0 z-5 shadow-md">
       <NavbarBrand href="/" as={Link}>
         <SendHorizonal className="size-10 mr-5 stroke-primary" />
-        <span className="hidden sm:block self-center text-primary whitespace-nowrap text-2xl font-semibold">
+        <span className="hidden md:block self-center text-primary whitespace-nowrap text-2xl font-semibold">
           {appName}
         </span>
       </NavbarBrand>
