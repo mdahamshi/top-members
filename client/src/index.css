@@ -118,5 +118,5 @@ button {
 }
 
 .card {
-  @apply max-w-md w-full mx-auto space-y-6 dark:text-white flex flex-col p-4 rounded-md shadow-md dark:bg-primaryDark justify-between gap-3;
+  @apply max-w-md w-full mx-auto space-y-6 bg-white dark:text-white flex flex-col p-4 rounded-md shadow-md dark:bg-primaryDark justify-between gap-3;
 }
