@@ -87,17 +87,17 @@ const MessageBubble = ({
             </div>
           </div>
           <div className="flex justify-between items-end">
-            <div className="dark:text-white text-sm ">
-              by:
-              <strong className="dark:text-white text-primary">
-                <Link
-                  to={username ? `/users/${msg.user_id}/messages` : '/login'}
-                >
-                  {' '}
-                  @{username ? username : '******'}
-                </Link>
-              </strong>
-            </div>
+            {username && user.id !== msg.user_id && (
+              <div className="dark:text-white text-sm ">
+                by:
+                <strong className="dark:text-white text-primary">
+                  <Link to={`/users/${msg.user_id}/messages`}>
+                    {' '}
+                    @{username}
+                  </Link>
+                </strong>
+              </div>
+            )}
             {editable && (
               <div className="flex gap-4 ">
                 <span title="Edit" className="clickable">
