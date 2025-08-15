@@ -71,11 +71,11 @@ const MessageBubble = ({
                     {title}
                   </h2>
                 )}
-                {created_at && (
-                  <span className="text-xs text-gray-400 whitespace-nowrap">
-                    {format(new Date(created_at), 'dd/MM HH:mm')}
-                  </span>
-                )}
+                <span className="text-xs text-gray-400 whitespace-nowrap">
+                  {created_at
+                    ? format(new Date(created_at), 'dd/MM HH:mm')
+                    : '(Date)'}
+                </span>
               </div>
               <div className="flex gap-4 justify-end">
                 {msg.pinned && <Pin />}
@@ -85,17 +85,17 @@ const MessageBubble = ({
             <div className="tracking-wide">{msg.content}</div>
           </div>
           <div className="flex justify-between items-end">
-            {username && (
-              <div className="dark:text-white text-sm ">
-                by:
-                <strong className="dark:text-white text-primary">
-                  <Link to={`/users/${msg.user.id}/messages`}>
-                    {' '}
-                    @{username}
-                  </Link>
-                </strong>
-              </div>
-            )}
+            <div className="dark:text-white text-sm ">
+              by:
+              <strong className="dark:text-white text-primary">
+                <Link
+                  to={username ? `/users/${msg.user_id}/messages` : '/login'}
+                >
+                  {' '}
+                  @{username ? username : '******'}
+                </Link>
+              </strong>
+            </div>
             {editable && (
               <div className="flex gap-4 ">
                 <span title="Edit" className="clickable">
