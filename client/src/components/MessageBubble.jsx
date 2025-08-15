@@ -116,7 +116,6 @@ const MessageBubble = ({
             )}
           </div>
         </div>
-        <div className={` w-12 h-12 rounded-full shrink-0 `}></div>
       </div>
     </div>
   );
