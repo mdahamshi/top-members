@@ -94,7 +94,9 @@ button:hover,
   transform: scale(1.03);
   transition: all 0.3s ease;
 }
-
+button {
+  @apply disabled:bg-gray-400 disabled:text-white disabled:cursor-not-allowed;
+}
 .dark {
   --primary: white;
   --accent: var(--primary);

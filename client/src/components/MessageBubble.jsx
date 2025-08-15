@@ -5,6 +5,7 @@ import { Button } from 'flowbite-react';
 import MessageEdit from './MessageEdit';
 import { Link } from 'react-router-dom';
 import api from '../api/urls';
+import ConfirmBlock from './ConfirmBlock';
 const getInitials = (name) => (name ? name.charAt(0).toUpperCase() : ': )');
 
 const MessageBubble = ({
@@ -14,19 +15,24 @@ const MessageBubble = ({
   avatarColor = '#6C63FF',
 }) => {
   const [edit, setEdit] = useState(false);
+  const [remove, setRemove] = useState(false);
   const { created_at, editable, title } = { ...msg };
   const username = msg?.user?.username;
   const isMember = !!msg?.user?.username;
   const name = msg?.user?.fname;
-  const messageDelete = async () => {
-    const confirmed = window.confirm(
-      'Are you sure you want to delete this message?'
-    );
-    if (!confirmed) return;
-
-    return removeMessage(msg.id);
+  const messageDeleteConfirm = () => {
+    setRemove(true);
   };
-
+  if (remove)
+    return (
+      <ConfirmBlock
+        onConfirm={async () => await removeMessage(msg.id)}
+        onCancel={() => setRemove(false)}
+        confirmLabel="Delete"
+        message="Are you sure you want to delete this message ?"
+        title="Delete"
+      />
+    );
   if (edit)
     return (
       <MessageEdit
@@ -91,7 +97,7 @@ const MessageBubble = ({
           <span title="Delete" className="clickable">
             <Trash
               className="dark:stroke-white clickable"
-              onClick={messageDelete}
+              onClick={messageDeleteConfirm}
             />
           </span>
         </div>
