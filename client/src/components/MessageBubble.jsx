@@ -87,7 +87,7 @@ const MessageBubble = ({
             </div>
           </div>
           <div className="flex justify-between items-end">
-            {username && user.id !== msg.user_id && (
+            {isAuth && user.id !== msg.user_id && (
               <div className="dark:text-white text-sm ">
                 by:
                 <strong className="dark:text-white text-primary">
