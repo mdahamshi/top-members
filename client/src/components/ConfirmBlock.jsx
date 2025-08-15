@@ -39,7 +39,7 @@ export default function ConfirmBlock({
             type="button"
             onClick={onCancel}
             disabled={loading}
-            className="px-4 py-2 rounded  bg-gray-200 dark:bg-gray-700"
+            className="px-4 dark:text-white py-2 rounded  bg-gray-200 dark:bg-gray-700"
           >
             {cancelLabel}
           </button>

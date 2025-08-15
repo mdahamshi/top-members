@@ -70,14 +70,14 @@ const MessageEdit = ({ onCancelSave, msg }) => {
         </div>
       )}
 
-      <div className="w-full flex gap-4 justify-end">
-        <Button
+      <div className="w-full  flex gap-4 justify-end">
+        <button
           onClick={onCancelSave}
           type="button"
-          className="btn-primary flex gap-4"
+          className="px-4 py-2 rounded  bg-gray-200 dark:text-white dark:bg-gray-700"
         >
           Cancel
-        </Button>
+        </button>
         <Button type="submit" className="btn-primary flex gap-4">
           Save
           <SendHorizontal />
