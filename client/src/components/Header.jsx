@@ -56,7 +56,10 @@ export default function Component() {
             <CircleUser />
           </NavLink>
         )}
-        <NavbarToggle onClick={() => setIsOpen(!isOpen)} />{' '}
+        <NavbarToggle
+          className="dark:text-white text-primary"
+          onClick={() => setIsOpen(!isOpen)}
+        />{' '}
       </div>
 
       <NavbarCollapse className={isOpen ? 'block' : 'hidden'}>
