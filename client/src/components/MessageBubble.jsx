@@ -67,7 +67,7 @@ const MessageBubble = ({
             <div className="flex mb-1 gap-3 justify-between  items-center">
               <div className="flex items-center gap-4">
                 {title && (
-                  <h2 className="text-md font-bold  whitespace-break-spaces">
+                  <h2 className="first-letter:uppercase text-md font-bold  whitespace-break-spaces">
                     {title}
                   </h2>
                 )}
@@ -82,7 +82,9 @@ const MessageBubble = ({
               </div>
             </div>
 
-            <div className="tracking-wide">{msg.content}</div>
+            <div className="tracking-wide first-letter:uppercase">
+              {msg.content}
+            </div>
           </div>
           <div className="flex justify-between items-end">
             <div className="dark:text-white text-sm ">
