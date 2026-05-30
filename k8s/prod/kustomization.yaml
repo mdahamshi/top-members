@@ -1,0 +1,13 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: top-members
+resources:
+  - ../base
+  - namespace.yaml
+images:
+  - name: ghcr.io/mdahamshi/top-members-client
+    newTag: "${IMAGE_TAG}"
+  - name: ghcr.io/mdahamshi/top-members-server
+    newTag: "${IMAGE_TAG}"
+patches:
+  - path: ingress-patch.yaml
