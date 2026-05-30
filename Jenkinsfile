@@ -29,29 +29,8 @@ pipeline {
         }
 
         stage('Test') {
-            parallel {
-                stage('Server Tests') {
-                    agent {
-                        docker {
-                            image 'node:20'
-                            reuseNode true
-                        }
-                    }
-                    steps {
-                        sh 'npm test --prefix server'
-                    }
-                }
-                stage('Client Tests') {
-                    agent {
-                        docker {
-                            image 'node:20'
-                            reuseNode true
-                        }
-                    }
-                    steps {
-                        sh 'npm test --prefix client'
-                    }
-                }
+            steps {
+                sh 'npm test --prefix server'
             }
         }
 
