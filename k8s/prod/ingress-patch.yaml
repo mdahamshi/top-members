@@ -21,3 +21,20 @@ spec:
                 name: client
                 port:
                   number: 80
+    - host: top-members-k3s.sarawebs.com
+      http:
+        paths:
+          - path: /api/
+            pathType: Prefix
+            backend:
+              service:
+                name: server
+                port:
+                  number: 4000
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: client
+                port:
+                  number: 80
