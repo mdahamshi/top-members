@@ -18,7 +18,7 @@ pipeline {
         stage('Build') {
             agent {
                 docker {
-                    image 'node:20'
+                    image 'node:20-alpine'
                     reuseNode true
                 }
             }
@@ -29,6 +29,12 @@ pipeline {
         }
 
         stage('Test') {
+            agent {
+                docker {
+                    image 'node:20-alpine'
+                    reuseNode true
+                }
+            }
             steps {
                 sh 'npm test --prefix server'
             }
