@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "nodemon --require dotenv/config  src/index.js",
     "format": "npx prettier --write .",
-    "test": "jest",
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest",
     "start": "node src/index.js"
   },
   "dependencies": {
