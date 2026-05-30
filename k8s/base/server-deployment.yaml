@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: server
+  template:
+    metadata:
+      labels:
+        app: server
+    spec:
+      initContainers:
+        - name: wait-for-postgres
+          image: postgres:15
+          command:
+            - sh
+            - -c
+            - until pg_isready -h postgres -U "$(POSTGRES_USER)"; do echo waiting for postgres; sleep 2; done
+          envFrom:
+            - secretRef:
+                name: top-members-secrets
+      containers:
+        - name: server
+          image: ghcr.io/mdahamshi/top-members-server
+          ports:
+            - containerPort: 4000
+          env:
+            - name: PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: top-members-config
+                  key: PORT
+            - name: API_VERSION
+              valueFrom:
+                configMapKeyRef:
+                  name: top-members-config
+                  key: API_VERSION
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: top-members-secrets
+                  key: DATABASE_URL
+            - name: MEMBERSHIP_PASSCODE
+              valueFrom:
+                secretKeyRef:
+                  name: top-members-secrets
+                  key: MEMBERSHIP_PASSCODE
+            - name: SESSION_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: top-members-secrets
+                  key: SESSION_SECRET
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: 4000
+            initialDelaySeconds: 15
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: 4000
+            initialDelaySeconds: 5
+            periodSeconds: 10
