@@ -6,6 +6,7 @@ RUN npm install && npm run build
 
 # Serve with static file server (Nginx or Caddy or serve)
 FROM nginx:alpine
+LABEL org.opencontainers.image.source=https://github.com/mdahamshi/top-members
 COPY --from=builder /app/dist /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80
