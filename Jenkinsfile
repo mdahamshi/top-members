@@ -6,6 +6,8 @@ pipeline {
         CLIENT_IMAGE = "${REGISTRY}/top-members-client"
         SERVER_IMAGE = "${REGISTRY}/top-members-server"
         IMAGE_TAG = "${BUILD_NUMBER}"
+        K8_STAGING_NS = "staging"
+        K8_PROD_NS = "top-members"
     }
 
     stages {
@@ -47,9 +49,9 @@ pipeline {
                         chmod 600 /tmp/k3s-config
                         sed -i 's|newTag: ".*"|newTag: "'"$IMAGE_TAG"'"|' k8s/staging/kustomization.yaml
                         kubectl --kubeconfig=/tmp/k3s-config apply -k k8s/staging
-                        kubectl --kubeconfig=/tmp/k3s-config rollout status deployment/client -n staging --timeout=120s
-                        kubectl --kubeconfig=/tmp/k3s-config rollout status deployment/server -n staging --timeout=120s
-                        kubectl --kubeconfig=/tmp/k3s-config rollout status statefulset/postgres -n staging --timeout=120s
+                        kubectl --kubeconfig=/tmp/k3s-config rollout status deployment/client -n $K8_STAGING_NS --timeout=120s
+                        kubectl --kubeconfig=/tmp/k3s-config rollout status deployment/server -n $K8_STAGING_NS --timeout=120s
+                        kubectl --kubeconfig=/tmp/k3s-config rollout status statefulset/postgres -n $K8_STAGING_NS --timeout=120s
                         rm -f /tmp/k3s-config
                     '''
                 }
@@ -68,9 +70,9 @@ pipeline {
                         chmod 600 /tmp/k3s-config
                         sed -i 's|newTag: ".*"|newTag: "'"$IMAGE_TAG"'"|' k8s/prod/kustomization.yaml
                         kubectl --kubeconfig=/tmp/k3s-config apply -k k8s/prod
-                        kubectl --kubeconfig=/tmp/k3s-config rollout status deployment/client --timeout=120s
-                        kubectl --kubeconfig=/tmp/k3s-config rollout status deployment/server --timeout=120s
-                        kubectl --kubeconfig=/tmp/k3s-config rollout status statefulset/postgres --timeout=120s
+                        kubectl --kubeconfig=/tmp/k3s-config rollout status deployment/client -n $K8_PROD_NS --timeout=120s
+                        kubectl --kubeconfig=/tmp/k3s-config rollout status deployment/server -n $K8_PROD_NS --timeout=120s
+                        kubectl --kubeconfig=/tmp/k3s-config rollout status statefulset/postgres -n $K8_PROD_NS --timeout=120s
                         rm -f /tmp/k3s-config
                     '''
                 }
