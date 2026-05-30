@@ -1,5 +1,5 @@
 # Build React app
-FROM node:20 AS builder
+FROM node:20-alpine AS builder
 WORKDIR /app
 COPY . .
 RUN npm install && npm run build
