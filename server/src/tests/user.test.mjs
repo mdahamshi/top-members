@@ -1,3 +1,4 @@
+import { jest } from "@jest/globals";
 import request from "supertest";
 import { app } from "../index.js"; // your Express app
 import db from "../db/db.js"; // DB module to mock
