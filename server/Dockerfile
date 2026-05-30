@@ -8,4 +8,4 @@ RUN npm install
 
 COPY . .
 
-CMD ["sh", "-c", "./wait-for-it.sh postgres:5432 -- node src/index.js"]
+CMD ["sh", "-c", "node src/index.js"]
