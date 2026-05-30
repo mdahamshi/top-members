@@ -6,12 +6,11 @@ pipeline {
         CLIENT_IMAGE = "${REGISTRY}/top-members-client"
         SERVER_IMAGE = "${REGISTRY}/top-members-server"
         IMAGE_TAG = "${BUILD_NUMBER}"
-        K8_STAGING_NS = "staging"
-        K8_PROD_NS = "top-members"
+        K8_STAGING_NS = 'staging'
+        K8_PROD_NS = 'top-members'
     }
 
     stages {
-
         stage('Build') {
             agent {
                 docker {
