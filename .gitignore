@@ -147,3 +147,4 @@ k8s/**/secrets.yaml
 
 # k8s seed data ConfigMap (create from local seed.sql)
 k8s/**/seed-data.yaml
+scripts/**/seed.sql

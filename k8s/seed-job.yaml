@@ -1,0 +1,25 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: db-seed
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: psql
+          image: postgres:15
+          command:
+            - sh
+            - -c
+            - psql "$DATABASE_URL" -f /seed/seed.sql
+          envFrom:
+            - secretRef:
+                name: top-members-secrets
+          volumeMounts:
+            - name: seed-data
+              mountPath: /seed
+      volumes:
+        - name: seed-data
+          configMap:
+            name: db-seed-data
