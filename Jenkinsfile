@@ -41,14 +41,17 @@ pipeline {
 
         stage('Deploy Staging') {
             steps {
-                script {
-                    sh """
-                        sed -i 's/\${IMAGE_TAG}/${IMAGE_TAG}/g' k8s/staging/kustomization.yaml
-                        kubectl apply -k k8s/staging
-                        kubectl rollout status deployment/client -n staging --timeout=120s
-                        kubectl rollout status deployment/server -n staging --timeout=120s
-                        kubectl rollout status statefulset/postgres -n staging --timeout=120s
-                    """
+                withCredentials([string(credentialsId: 'k3s-kubeconfig', variable: 'KUBECONFIG_CONTENT')]) {
+                    sh '''
+                        echo "$KUBECONFIG_CONTENT" | base64 -d > /tmp/k3s-config
+                        chmod 600 /tmp/k3s-config
+                        sed -i 's|newTag: ".*"|newTag: "'"$IMAGE_TAG"'"|' k8s/staging/kustomization.yaml
+                        kubectl --kubeconfig=/tmp/k3s-config apply -k k8s/staging
+                        kubectl --kubeconfig=/tmp/k3s-config rollout status deployment/client -n staging --timeout=120s
+                        kubectl --kubeconfig=/tmp/k3s-config rollout status deployment/server -n staging --timeout=120s
+                        kubectl --kubeconfig=/tmp/k3s-config rollout status statefulset/postgres -n staging --timeout=120s
+                        rm -f /tmp/k3s-config
+                    '''
                 }
             }
         }
@@ -59,14 +62,17 @@ pipeline {
                 ok 'Yes, deploy to production'
             }
             steps {
-                script {
-                    sh """
-                        sed -i 's/\${IMAGE_TAG}/${IMAGE_TAG}/g' k8s/prod/kustomization.yaml
-                        kubectl apply -k k8s/prod
-                        kubectl rollout status deployment/client --timeout=120s
-                        kubectl rollout status deployment/server --timeout=120s
-                        kubectl rollout status statefulset/postgres --timeout=120s
-                    """
+                withCredentials([string(credentialsId: 'k3s-kubeconfig', variable: 'KUBECONFIG_CONTENT')]) {
+                    sh '''
+                        echo "$KUBECONFIG_CONTENT" | base64 -d > /tmp/k3s-config
+                        chmod 600 /tmp/k3s-config
+                        sed -i 's|newTag: ".*"|newTag: "'"$IMAGE_TAG"'"|' k8s/prod/kustomization.yaml
+                        kubectl --kubeconfig=/tmp/k3s-config apply -k k8s/prod
+                        kubectl --kubeconfig=/tmp/k3s-config rollout status deployment/client --timeout=120s
+                        kubectl --kubeconfig=/tmp/k3s-config rollout status deployment/server --timeout=120s
+                        kubectl --kubeconfig=/tmp/k3s-config rollout status statefulset/postgres --timeout=120s
+                        rm -f /tmp/k3s-config
+                    '''
                 }
             }
         }
