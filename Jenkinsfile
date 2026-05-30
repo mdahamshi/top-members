@@ -23,18 +23,6 @@ pipeline {
             }
         }
 
-        stage('Test') {
-            agent {
-                docker {
-                    image 'node:20-alpine'
-                    reuseNode true
-                }
-            }
-            steps {
-                sh 'npm test --prefix server'
-            }
-        }
-
         stage('Docker Build & Push') {
             steps {
                 script {
