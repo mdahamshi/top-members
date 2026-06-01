@@ -62,7 +62,7 @@ flowchart LR
 ## Quick Start (Development)
 
 ```bash
-git clone <repo-url>
+git clone https://github.com/mdahamshi/top-members.git
 cd top-members
 npm install
 npm run dev
