@@ -1,61 +1,142 @@
 # SalmaMembers
 
-SalmaMembers is a self-hosted,exposed by cloudflare tunnel, full-stack messaging and member management application.  
-It features a clean UI, user authentication, editable messages, pinned posts, and responsive design — all built with React, Flowbite, and a REST API backend.
+SalmaMembers is a self-hosted, full-stack member management and messaging platform built with React, Node.js, and PostgreSQL.
 
----
-> 🟢 **Live Demo**: [https://link.sarawebs.com/top-members](https://link.sarawebs.com/top-members)
+The project is deployed in production using Docker Compose, Coolify, and Cloudflare Tunnel, and is currently being migrated to Kubernetes (k3s) as part of a DevOps-focused infrastructure project.
 
-## ✨ Features
+> 🟢 **Live Demo:** https://link.sarawebs.com/top-members
 
-- **User Authentication** – Login, signup, and member role checks.
-- **Message Board** – Post, edit, and delete messages in real time.
-- **Pinned Messages** – Highlight important announcements at the top.
-- **Inline Editing** – Edit messages directly inside the conversation list.
-- **Responsive UI** – Mobile-friendly chat bubble design.
-- **Date Formatting** – Friendly timestamps via `date-fns`.
-- **Self-Hosted** – Runs on your own server (tested with Proxmox + Coolify + Cloudflare Tunnel).
+> 🟢 **Live Demo - K3S:** https://top-members-k3s.sarawebs.com/
 
 ---
 
-## 📸 Screenshots
+## Project Branches
 
-![Screenshot](sc.png)
-![Screenshot](sc2.png)
+| Branch          | Purpose                                                                       |
+| --------------- | ----------------------------------------------------------------------------- |
+| `main`          | Stable production deployment using Docker Compose + Coolify                   |
+| `k8s-migration` | Kubernetes (k3s) migration, CI/CD automation, and infrastructure-as-code work |
 
----
-
-## 🛠 Tech Stack
-
-**Frontend**
-
-- [React](https://reactjs.org/)
-- [Flowbite React](https://flowbite-react.com/) (Tailwind-based UI components)
-- [Lucide React](https://lucide.dev/) (icons)
-- [React Router](https://reactrouter.com/) (routing)
-- [date-fns](https://date-fns.org/) (date formatting)
-
-**Backend**
-
-- REST API (compatible with CRUD operations in `useCrud` hook)
-- PostgreSQL (example seed data included)
-- Node.js / Express (example API layer)
-- exposed by cloudflare tunnel
-- coolify
-- proxmox
+The goal of the `k8s-migration` branch is to evolve the application from a Docker Compose deployment into a production-style Kubernetes platform with Jenkins-based CI/CD, container image automation, ingress management, persistent storage, and observability.
 
 ---
 
-## 📦 Installation
+## Features
+
+* User Authentication – Login, signup, and member role checks
+* Message Board – Post, edit, and delete messages
+* Pinned Messages – Highlight important announcements
+* Inline Editing – Edit messages directly in the UI
+* Responsive Design – Mobile-friendly interface
+* PostgreSQL Persistence – Durable storage backend
+* Self-Hosted Deployment – Runs entirely on self-managed infrastructure
+* Production Operations – Backups, monitoring, reverse proxy, and secure remote access
+
+---
+
+## Infrastructure
+
+### Current Production Stack
+
+* Proxmox VE
+* Coolify
+* Docker Compose
+* PostgreSQL
+* Cloudflare Tunnel
+* Linux (Ubuntu/Debian)
+
+### Kubernetes Migration Stack
+
+* Kubernetes (k3s)
+* Jenkins
+* Docker
+* GitHub Container Registry (GHCR)
+* Traefik Ingress
+* Helm (planned)
+* Prometheus & Grafana (planned)
+
+---
+
+## Screenshots
+
+![Application Screenshot](sc.png)
+
+![Application Screenshot](sc2.png)
+
+![Screenshot](https://raw.githubusercontent.com/mdahamshi/top-members/refs/heads/k8s-migration/docs/screenshots/kube-all.png)
+
+---
+
+## Technology Stack
+
+### Frontend
+
+* React
+* Flowbite React
+* Tailwind CSS
+* Lucide React
+* React Router
+* date-fns
+
+### Backend
+
+* Node.js
+* Express
+* PostgreSQL
+* REST API
+
+### Infrastructure & DevOps
+
+* Docker
+* Docker Compose
+* Coolify
+* Proxmox VE
+* Cloudflare Tunnel
+* Kubernetes (k3s)
+* Jenkins
+* GitHub Actions (planned)
+* Helm (planned)
+
+---
+
+## Local Development
 
 ```bash
-# Clone repository
 git clone https://github.com/mdahamshi/top-members.git
+
 cd top-members
 
-# Install dependencies
 npm install
 
-# Start development server
 npm run dev
+```
+
+---
+
+## Roadmap
+
+### Completed
+
+* Dockerized multi-service architecture
+* PostgreSQL persistence
+* Production deployment via Coolify
+* Cloudflare Tunnel exposure
+* Automated backups and infrastructure management
+
+### In Progress
+
+* Kubernetes (k3s) migration
+* Jenkins CI/CD pipeline
+* Container registry integration
+* Kubernetes ingress configuration
+
+### Planned
+
+* Helm charts
+* Prometheus monitoring
+* Grafana dashboards
+* GitHub Actions workflows
+* GitOps with ArgoCD
+
+```
 ```
