@@ -14,6 +14,7 @@ flowchart LR
     Server --> PostgreSQL
     Cloudflare --> k3s
 ```
+![Screenshot](docs/screenshots/flow.png)
 
 ## Tech Stack
 
