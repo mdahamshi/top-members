@@ -56,7 +56,15 @@ pipeline {
                 }
             }
         }
-
+        stage('Deploy via Ansible') {
+            steps {
+                dir('ansible-homelab') {
+                    git branch: 'main',
+                        url: 'https://github.com/mdahamshi/ansible-homelab.git'
+                }
+                sh "ansible-playbook ansible-homelab/deploy.yml -e \"image_tag=${IMAGE_TAG}\""
+            }
+        }
         stage('Deploy Prod') {
             steps {
                 script {
