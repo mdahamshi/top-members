@@ -65,31 +65,31 @@ pipeline {
                 sh "ansible-playbook ansible-homelab/deploy.yml -e \"image_tag=${IMAGE_TAG}\""
             }
         }
-        stage('Deploy Prod') {
-            steps {
-                script {
-                    try {
-                        timeout(time: 1, unit: 'HOURS') {
-                            input message: 'Deploy to production?', ok: 'Yes, deploy'
-                        }
-                        withCredentials([string(credentialsId: 'k3s-kubeconfig', variable: 'KUBECONFIG_CONTENT')]) {
-                            sh '''
-                                echo "$KUBECONFIG_CONTENT" | base64 -d > /tmp/k3s-config
-                                chmod 600 /tmp/k3s-config
-                                sed -i 's|newTag: ".*"|newTag: "'"$IMAGE_TAG"'"|' k8s/prod/kustomization.yaml
-                                kubectl --kubeconfig=/tmp/k3s-config apply -k k8s/prod
-                                kubectl --kubeconfig=/tmp/k3s-config rollout status deployment/client -n $K8_PROD_NS --timeout=120s
-                                kubectl --kubeconfig=/tmp/k3s-config rollout status deployment/server -n $K8_PROD_NS --timeout=120s
-                                kubectl --kubeconfig=/tmp/k3s-config rollout status statefulset/postgres -n $K8_PROD_NS --timeout=120s
-                                rm -f /tmp/k3s-config
-                            '''
-                        }
-                    } catch (Exception e) {
-                        echo "Production deployment skipped: ${e.getMessage()}"
-                    }
-                }
-            }
-        }
+        // stage('Deploy Prod') {
+        //     steps {
+        //         script {
+        //             try {
+        //                 timeout(time: 1, unit: 'HOURS') {
+        //                     input message: 'Deploy to production?', ok: 'Yes, deploy'
+        //                 }
+        //                 withCredentials([string(credentialsId: 'k3s-kubeconfig', variable: 'KUBECONFIG_CONTENT')]) {
+        //                     sh '''
+        //                         echo "$KUBECONFIG_CONTENT" | base64 -d > /tmp/k3s-config
+        //                         chmod 600 /tmp/k3s-config
+        //                         sed -i 's|newTag: ".*"|newTag: "'"$IMAGE_TAG"'"|' k8s/prod/kustomization.yaml
+        //                         kubectl --kubeconfig=/tmp/k3s-config apply -k k8s/prod
+        //                         kubectl --kubeconfig=/tmp/k3s-config rollout status deployment/client -n $K8_PROD_NS --timeout=120s
+        //                         kubectl --kubeconfig=/tmp/k3s-config rollout status deployment/server -n $K8_PROD_NS --timeout=120s
+        //                         kubectl --kubeconfig=/tmp/k3s-config rollout status statefulset/postgres -n $K8_PROD_NS --timeout=120s
+        //                         rm -f /tmp/k3s-config
+        //                     '''
+        //                 }
+        //             } catch (Exception e) {
+        //                 echo "Production deployment skipped: ${e.getMessage()}"
+        //             }
+        //         }
+        //     }
+        // }
     }
 
     post {
