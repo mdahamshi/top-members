@@ -15,9 +15,10 @@ The project is deployed in production using Docker Compose, Coolify, and Cloudfl
 | Branch          | Purpose                                                                       |
 | --------------- | ----------------------------------------------------------------------------- |
 | `main`          | Stable production deployment using Docker Compose + Coolify                   |
+| `ansible`       | Ansible-based deployment to k3s with Jenkins CI/CD (active)                  |
 | `k8s-migration` | Kubernetes (k3s) migration, CI/CD automation, and infrastructure-as-code work |
 
-The goal of the `k8s-migration` branch is to evolve the application from a Docker Compose deployment into a production-style Kubernetes platform with Jenkins-based CI/CD, container image automation, ingress management, persistent storage, and observability.
+The goal of the `k8s-migration` branch is to evolve the application from a Docker Compose deployment into a production-style Kubernetes platform with Jenkins-based CI/CD, container image automation, ingress management, persistent storage, and observability. The `ansible` branch takes this further by replacing direct `kubectl` commands with an Ansible playbook for cleaner, reusable deployments.
 
 ---
 
@@ -49,6 +50,7 @@ The goal of the `k8s-migration` branch is to evolve the application from a Docke
 
 * Kubernetes (k3s)
 * Jenkins
+* Ansible
 * Docker
 * GitHub Container Registry (GHCR)
 * Traefik Ingress
@@ -94,6 +96,7 @@ The goal of the `k8s-migration` branch is to evolve the application from a Docke
 * Cloudflare Tunnel
 * Kubernetes (k3s)
 * Jenkins
+* Ansible (new)
 * GitHub Actions (planned)
 * Helm (planned)
 
@@ -127,6 +130,7 @@ npm run dev
 
 * Kubernetes (k3s) migration
 * Jenkins CI/CD pipeline
+* Ansible deployment automation
 * Container registry integration
 * Kubernetes ingress configuration
 
