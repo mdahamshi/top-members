@@ -10,9 +10,7 @@ The Jenkins Declarative Pipeline (`Jenkinsfile`) automates the entire build, tes
 flowchart LR
     Checkout --> Build
     Build --> Docker[Docker Build & Push]
-    Docker --> DeployStaging[Deploy Staging]
-    DeployStaging --> Approval{Manual Approval}
-    Approval --> DeployProd[Deploy Prod]
+    Docker --> Ansible[Deploy via Ansible]
 ```
 
 ### 1. Build
@@ -28,16 +26,11 @@ flowchart LR
 - Pushes to `ghcr.io/mdahamshi/`
 - Uses `docker.withRegistry` with stored credentials
 
-### 3. Deploy Staging
+### 3. Deploy via Ansible
 
-- Injects the new image tag into `k8s/staging/kustomization.yaml` via `sed`
-- Applies manifests with `kubectl apply -k`
-- Waits for rollout to complete
-
-### 4. Deploy Prod
-
-- Same as staging but with a manual approval gate
-- Deploys to `top-members` namespace
+- Clones the [`ansible-homelab`](https://github.com/mdahamshi/ansible-homelab) repository
+- Runs `ansible-playbook deploy.yml -e "image_tag=${IMAGE_TAG}"`
+- The playbook handles applying k8s manifests and rolling out updates
 
 ## Jenkins Setup
 
@@ -46,18 +39,22 @@ flowchart LR
 | ID | Type | Purpose |
 |---|---|---|
 | `github-user-pass` | Username with password | GHCR push (user: mdahamshi, pass: GitHub token) |
-| `k3s-kubeconfig` | Secret text | Base64-encoded k3s kubeconfig |
+
+### Custom Jenkins Image
+
+The pipeline requires a Jenkins agent with Ansible and kubectl installed.  
+See [`Dockerfile`](../Dockerfile) for the custom image based on `jenkins/jenkins:2.555.2`.
 
 ### Required Plugins
 
 - Docker Pipeline
-- Credentials Binding
 
-## Kustomize Image Tag Injection
+## Ansible Deployment
 
-The pipeline uses `sed` to replace the `newTag` in the Kustomize overlay before applying:
+The pipeline delegates all cluster operations to an Ansible playbook from the external [`ansible-homelab`](https://github.com/mdahamshi/ansible-homelab) repo:
 
 ```bash
-sed -i 's|newTag: ".*"|newTag: "'"$IMAGE_TAG"'"|' k8s/staging/kustomization.yaml
-kubectl --kubeconfig=/tmp/k3s-config apply -k k8s/staging
+ansible-playbook deploy.yml -e "image_tag=<build-number>"
 ```
+
+The playbook handles image tag injection, manifest application, and rollout verification on the k3s cluster.

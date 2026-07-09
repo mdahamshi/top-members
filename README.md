@@ -1,7 +1,8 @@
 # Top Members
 
-A full-stack messaging and member management application migrated from Docker Compose/Coolify to k3s Kubernetes with Jenkins CI/CD.
+A full-stack messaging and member management application deployed to k3s Kubernetes via Ansible, with Jenkins CI/CD.
 
+> 🟢 **Live Demo - K3S:** https://top-members-k3s.sarawebs.com/
 ## Architecture Diagram
 
 ```mermaid
@@ -26,6 +27,7 @@ flowchart LR
 | **Container** | Docker, multi-stage builds |
 | **Orchestration** | k3s Kubernetes |
 | **CI/CD** | Jenkins Declarative Pipeline |
+| **Deployment** | Ansible |
 | **Registry** | GitHub Container Registry (GHCR) |
 | **Ingress** | Traefik (k3s built-in) |
 | **Infrastructure** | Proxmox → k3s → Cloudflare Tunnel |
@@ -39,11 +41,12 @@ flowchart LR
 ├── server/              # Express API backend
 │   ├── Dockerfile
 │   └── src/
-├── k8s/
-│   ├── base/            # Kustomize base manifests
-│   ├── staging/         # Staging overlay
-│   └── prod/            # Production overlay
+├── k8s/                 # Kustomize manifests (managed by Ansible)
+│   ├── base/
+│   ├── staging/
+│   └── prod/
 ├── Jenkinsfile           # CI/CD pipeline
+├── Dockerfile            # Custom Jenkins image with Ansible + kubectl
 └── docs/                # Documentation
 ```
 
@@ -53,11 +56,9 @@ flowchart LR
 flowchart LR
     Push[Git Push] --> Jenkins[Trigger Jenkins]
     Jenkins --> Build[npm ci + vite build]
-    Build --> Test[npm test]
-    Test --> Docker[Docker Build & Push]
-    Docker --> Staging[Deploy to Staging]
-    Staging --> Approval{Manual Approval}
-    Approval --> Prod[Deploy to Production]
+    Build --> Docker[Docker Build & Push]
+    Docker --> Ansible[Ansible Playbook]
+    Ansible --> K8s[k3s Cluster]
 ```
 
 ## Quick Start (Development)
@@ -88,12 +89,14 @@ See [docs/ci-cd.md](docs/ci-cd.md) for Jenkins pipeline setup.
 flowchart LR
     Compose[Docker Compose] --> Coolify[Coolify / Proxmox]
     Coolify --> K8s[Manual k8s Manifests]
-    K8s --> Jenkins[Jenkins CI/CD]
+    K8s --> Jenkins[Jenkins CI/CD + kubectl]
+    Jenkins --> Ansible[Ansible Automation]
 ```
 
 ## Lessons Learned
 
 - Kustomize overlays simplify environment management (staging vs prod)
 - StatefulSets for databases require careful PVC planning
-- Jenkins with Docker Pipeline plugin streamlines image builds
+- Ansible provides a cleaner, reusable deployment layer on top of k8s manifests
+- Custom Jenkins Docker image bundles both Ansible and kubectl for pipeline execution
 - Cloudflare Tunnel + k3s Traefik works seamlessly for private clusters
