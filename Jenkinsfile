@@ -61,8 +61,8 @@ pipeline {
                 dir('ansible-homelab') {
                     git branch: 'main',
                         url: 'https://github.com/mdahamshi/ansible-homelab.git'
+                    sh "ansible-playbook deploy.yml -e \"image_tag=${IMAGE_TAG}\""
                 }
-                sh "cd ansible-homelab && ansible-playbook deploy.yml -e \"image_tag=${IMAGE_TAG}\""
             }
         }
     // stage('Deploy Prod') {
